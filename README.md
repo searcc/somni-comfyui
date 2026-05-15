@@ -62,7 +62,7 @@ The launch script binds to `0.0.0.0`, so any device on your Wi-Fi can reach it.
 
 ## ✦ Reference image (IP-Adapter)
 
-Three modes, three workflows. Each needs specific model files in your ComfyUI install — somni's UI tells you which one is active, but **the models are on you to download**:
+Three modes, three workflows. Each needs specific model files in your ComfyUI install. somni's UI tells you which one is active, but **the models are on you to download**:
 
 | Mode | Needs |
 |---|---|
@@ -74,7 +74,7 @@ All three modes also need:
 - `CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors` in `ComfyUI/models/clip_vision/`
 - The [ComfyUI_IPAdapter_plus](https://github.com/cubiq/ComfyUI_IPAdapter_plus) custom node (install via ComfyUI Manager)
 
-Easiest path: open **ComfyUI Manager → Install Models**, search for "ipadapter" — pick what you want.
+Easiest path: open **ComfyUI Manager → Install Models**, search for "ipadapter". Pick what you want.
 
 ---
 
@@ -83,15 +83,15 @@ Easiest path: open **ComfyUI Manager → Install Models**, search for "ipadapter
 If somni won't launch:
 
 - **Re-run `installer.bat`** — this won't touch your images or settings, it just regenerates the launch scripts
-- **Check the terminal output** when running `launch_somni.bat` — Python errors get printed there
-- **Port conflict?** Something else on `:8080` (full ComfyUI desktop app?) — close it first
-- **MS Store Python stub** intercepting `python` — the installer handles this, but if it slipped through: `Settings → Apps → Advanced app settings → App execution aliases` → turn off the `python.exe` toggles
+- **Check the terminal output** when running `launch_somni.bat`. Python errors get printed there
+- **Port conflict?** Something else on `:8080` (full ComfyUI desktop app?) close it first
+- **MS Store Python stub** intercepting `python`: the installer handles this, but if it slipped through: `Settings → Apps → Advanced app settings → App execution aliases` → turn off the `python.exe` toggles
 
 If you find a bug or want a feature, [open an issue](../../issues).
 
 ---
 
-## ✦ How it works (for the curious)
+## ✦ How it works (in a nutshell)
 
 ```
 ┌──────────────┐    HTTP/WS     ┌──────────────────┐
@@ -106,7 +106,7 @@ If you find a bug or want a feature, [open an issue](../../issues).
                                 └──────────────────┘
 ```
 
-`server.py` is a tiny Python proxy (~200 lines, stdlib only). It serves `index.html` and forwards everything else to ComfyUI, stripping `Origin`/`Referer` headers so ComfyUI's loopback host-check passes. It also adds two endpoints — `/__list` for gallery thumbnails and `/__delete` for delete buttons — because vanilla ComfyUI doesn't expose them.
+`server.py` is a tiny Python proxy (~200 lines, stdlib only). It serves `index.html` and forwards everything else to ComfyUI, stripping `Origin`/`Referer` headers so ComfyUI's loopback host-check passes. It also adds two endpoints: `/__list` for gallery thumbnails and `/__delete` for delete buttons because vanilla ComfyUI doesn't expose them.
 
 The entire UI is one HTML file. No build step. No npm. No bundler. Open the source and you can change anything.
 
@@ -123,10 +123,10 @@ The entire UI is one HTML file. No build step. No npm. No bundler. Open the sour
 
 ## ✦ License
 
-MIT — see [LICENSE](LICENSE). Do whatever you want, just don't blame me.
+MIT (see [LICENSE](LICENSE)). Do whatever you want, just don't blame me.
 
 ---
 
 <div align="center">
-  <sub>Built on top of <a href="https://github.com/comfyanonymous/ComfyUI">ComfyUI</a>.</sub>
+  <sub>Built on top of <a href="https://github.com/comfyanonymous/ComfyUI">ComfyUI</a></sub>
 </div>
