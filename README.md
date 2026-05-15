@@ -3,9 +3,10 @@
 
   # somni
 
-  **A modern frontend for ComfyUI — Gemini-style easy mode, IP-Adapter support, and built for both desktop and mobile.**
+  **A modern frontend for ComfyUI. Gemini-style easy mode, IP-Adapter support, and built for both desktop and mobile.**
 
   <sub>Open `index.html` and you'll forget you're using ComfyUI.</sub>
+  <img src="somni-ui.png" alt="somni UI">
 </div>
 
 ---
