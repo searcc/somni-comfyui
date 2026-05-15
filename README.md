@@ -20,6 +20,7 @@ somni is a polished, opinionated frontend that runs alongside your existing Comf
 <div align="center">
   <img src="somni-ui-ez.png" width="500" alt="somni UI Easy Mode">
 </div>
+
 - **Pro mode**: full sidebar with sampler, scheduler, seed, LoRAs, CFG, advanced options
 - **Reference image (IP-Adapter)**: General · Face · FaceID modes with a denoising slider
 - **Batch generation**: generate N images, displayed in a scrollable preview
