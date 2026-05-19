@@ -7,7 +7,7 @@
 
   <sub>Open `index.html` and you'll forget you're using ComfyUI.</sub>
   
-  <img src="somni-ui.png" alt="somni UI">
+  <img src="screenshots/somni-ui.png" alt="somni UI">
 </div>
 
 ---
@@ -18,7 +18,7 @@ somni is a polished, opinionated frontend that runs alongside your existing Comf
 
 - **Easy mode**: a chat-style interface (think Gemini / ChatGPT) for one-prompt-and-go generation
 <div align="center">
-  <img src="somni-ui-easy.png" width="550" alt="somni UI Easy Mode">
+  <img src="screenshots/somni-ui-easy.png" width="550" alt="somni UI Easy Mode">
 </div>
 
 - **Pro mode**: full sidebar with sampler, scheduler, seed, LoRAs, CFG, advanced options
