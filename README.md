@@ -5,7 +5,7 @@
 
   **A modern frontend for ComfyUI. Gemini-style easy mode, IP-Adapter support, and built for both desktop and mobile.**
 
-  <sub>Open `index.html` and you'll forget you're using ComfyUI.</sub>
+  <sub>[Try it now](https://github.com/searcc/somni-comfyui/releases/latest) and you'll forget you're using ComfyUI.</sub>
   
   <img src="screenshots/somni-ui.png" alt="somni UI">
 </div>
