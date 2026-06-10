@@ -1,0 +1,40 @@
+# Per-install artifacts
+somni_config.json
+somni_users.json
+launch_somni.bat
+launch_comfyui_and_somni.bat
+
+# Python
+__pycache__/
+*.pyc
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+.vscode/
+.idea/
+
+# Agents
+.claude/
+.openjet/
+
+push-nightly.bat
+
+desktop/
+
+# Large files
+cloudflared.exe
+*.exe
+
+# Installer files (don't belong in somni install dir)
+installer.bat
+installer.html
+installer.py
+
+# Other scripts
+start_cloudflare_tunnel.bat
+
+# AI agent files
+.aiexclude
