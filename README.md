@@ -36,13 +36,13 @@ somni is a polished, opinionated frontend that runs alongside your existing Comf
 
 ### Requirements
 
-- **ComfyUI** already installed and working ([download here](https://github.com/comfyanonymous/ComfyUI))
+- **ComfyUI** already installed and working ([download here](https://github.com/Comfy-Org/ComfyUI))
 - **Python 3.x** in your PATH (same one you'd use to run ComfyUI is fine)
 - **Windows** (the launch scripts are `.bat` files; Linux/macOS support is on the roadmap)
 
 ### Steps (Web UI)
 
-1. **Download** the latest [release zip](../../releases) and extract it anywhere (e.g. `C:\somni`)
+1. **Download** the latest [release zip](../../releases/latest) and extract it anywhere
 2. **Run `installer.bat`**. Your browser opens to `http://localhost:8081`
 3. **Walk through the 4 steps:**
    - Point to your ComfyUI folder
@@ -56,7 +56,7 @@ That's it. somni opens in your browser at `http://localhost:8080`.
 
 ### Steps (Desktop Application)
 
-1. **Download** the latest [Windows release zip](../../releases) and extract it anywhere (e.g. `C:\somni`)
+1. **Download** the latest [Windows release zip](../../releases/latest) and extract it anywhere
 2. **Run `installer.exe`**. An installer window should open
 3. **Walk through the 3 steps:**
    - Point to your ComfyUI folder
