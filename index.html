@@ -9,12 +9,12 @@
   <style>
     @font-face {
       font-family: 'Chillax';
-      font-weight: 300;
+      font-weight: 100;
       font-style: normal;
-      src: url('fonts/Chillax/Fonts/WEB/fonts/Chillax-Light.woff2') format('woff2'),
-           url('fonts/Chillax/Fonts/WEB/fonts/Chillax-Light.woff') format('woff'),
-           url('fonts/Chillax/Fonts/WEB/fonts/Chillax-Light.ttf') format('truetype'),
-           url('fonts/Chillax/Fonts/WEB/fonts/Chillax-Light.eot') format('embedded-opentype');
+      src: url('fonts/Chillax/Fonts/WEB/fonts/Chillax-Regular.woff2') format('woff2'),
+           url('fonts/Chillax/Fonts/WEB/fonts/Chillax-Regular.woff') format('woff'),
+           url('fonts/Chillax/Fonts/WEB/fonts/Chillax-Regular.ttf') format('truetype'),
+           url('fonts/Chillax/Fonts/WEB/fonts/Chillax-Regular.eot') format('embedded-opentype');
       font-display: swap;
     }
 
@@ -163,6 +163,9 @@
       object-fit: contain;
       filter: brightness(0) invert(1);
       transition: transform .55s var(--ease-spring), filter .35s var(--ease-std);
+    }
+    html[data-theme='light'] .brand-icon {
+      filter: brightness(0);
     }
     .brand:hover .brand-icon { transform: rotate(-12deg) scale(1.08); }
     .brand-name { transition: letter-spacing .25s var(--ease-std); }
@@ -677,6 +680,247 @@
     .release-badge.older {
       background: var(--surface-3);
       color: var(--text-3);
+    }
+
+    /* Workflow browser modal */
+    .wf-browser-modal {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+      display: none; align-items: center; justify-content: center;
+      z-index: 260; padding: 24px;
+      animation: fade-up var(--dur-mid) var(--ease-out);
+    }
+    .wf-browser-modal.show { display: flex; }
+    .wf-browser-card {
+      background: var(--surface);
+      border: 1px solid var(--border-2);
+      border-radius: 16px;
+      width: 900px;
+      height: 600px;
+      display: flex; flex-direction: column;
+      overflow: hidden;
+    }
+    .wf-browser-header {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border);
+    }
+    .wf-browser-title {
+      font-size: 18px; font-weight: 700; color: var(--text);
+    }
+    .wf-browser-close {
+      background: transparent; border: none; color: var(--text-2);
+      cursor: pointer; padding: 4px; border-radius: 6px;
+      transition: background .15s, color .15s;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .wf-browser-close:hover {
+      background: var(--surface-2);
+      color: var(--text);
+    }
+    .wf-browser-content {
+      display: flex; flex: 1; overflow: hidden;
+    }
+    .wf-browser-sidebar {
+      width: 180px; padding: 16px 0;
+      border-right: 1px solid var(--border);
+      display: flex; flex-direction: column;
+      gap: 8px;
+    }
+    .wf-browser-filter-title {
+      font-size: 11px; font-weight: 600; color: var(--text-3);
+      text-transform: uppercase; letter-spacing: 0.5px;
+      padding: 0 20px; margin-bottom: 4px;
+    }
+    .wf-browser-filters {
+      display: flex; flex-direction: column; gap: 2px;
+    }
+    .wf-browser-filter {
+      background: transparent; border: none;
+      padding: 10px 20px;
+      text-align: left;
+      font-size: 13px; font-weight: 500; color: var(--text-2);
+      cursor: pointer; border-radius: 0;
+      transition: background .15s, color .15s;
+    }
+    .wf-browser-filter:hover {
+      background: var(--surface-2);
+      color: var(--text);
+    }
+    .wf-browser-filter.active {
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-weight: 600;
+    }
+    .wf-browser-main {
+      flex: 1; display: flex; flex-direction: column;
+      overflow: hidden;
+    }
+    .wf-browser-search {
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--border);
+    }
+    .wf-browser-search input {
+      width: 100%;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 13px; color: var(--text);
+      outline: none;
+      transition: border-color .15s, box-shadow .15s;
+    }
+    .wf-browser-search input:focus {
+      border-color: var(--accent-ring);
+      box-shadow: 0 0 0 3px var(--accent-soft);
+    }
+    .wf-browser-search input::placeholder {
+      color: var(--text-3);
+    }
+    .wf-browser-grid {
+      flex: 1; overflow-y: auto;
+      padding: 16px 24px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 16px;
+    }
+    .wf-card {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      display: flex; flex-direction: column;
+      gap: 12px;
+      transition: border-color .15s, box-shadow .15s;
+    }
+    .wf-card:hover {
+      border-color: var(--border-2);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .wf-card-header {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      gap: 8px;
+    }
+    .wf-card-title {
+      font-size: 15px; font-weight: 600; color: var(--text);
+    }
+    .wf-card-tag {
+      font-size: 10px; font-weight: 600; text-transform: uppercase;
+      padding: 4px 8px; border-radius: 4px;
+      background: var(--surface-3);
+      color: var(--text-3);
+    }
+    .wf-card-tag.simple { background: rgba(76, 175, 80, 0.15); color: #4caf50; }
+    .wf-card-tag.regular { background: rgba(33, 150, 243, 0.15); color: #2196f3; }
+    .wf-card-tag.advanced { background: rgba(244, 67, 54, 0.15); color: #f44336; }
+    .wf-card-desc {
+      font-size: 12px; color: var(--text-2);
+      line-height: 1.5;
+    }
+    .wf-card-actions {
+      margin-top: auto;
+    }
+    .wf-card-btn {
+      width: 100%;
+      padding: 10px;
+      border: none; border-radius: 8px;
+      font-size: 13px; font-weight: 600;
+      cursor: pointer;
+      transition: background .15s, transform .1s;
+    }
+    .wf-card-btn:active { transform: scale(0.98); }
+    .wf-card-btn.load {
+      background: var(--surface-3);
+      color: var(--text);
+      border: 1px solid var(--border-2);
+    }
+    .wf-card-btn.load:hover { background: var(--surface-4); border-color: var(--border-3); }
+    .wf-card-btn.install {
+      background: #ffc107;
+      color: #333;
+    }
+    .wf-card-btn.install:hover { background: #ffb300; }
+    .wf-browse-btn {
+      width: 100%;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 10px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 12px; font-weight: 600; color: var(--text-2);
+      cursor: pointer;
+      transition: background .15s, border-color .15s, color .15s;
+    }
+    .wf-browse-btn:hover {
+      background: var(--surface-3);
+      border-color: var(--border-2);
+      color: var(--text);
+    }
+    .wf-browse-btn svg {
+      width: 14px; height: 14px;
+    }
+    .wf-back-btn {
+      flex-shrink: 0;
+      width: 32px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text-2);
+      cursor: pointer;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      transition: color .15s var(--ease-std),
+                  background .15s var(--ease-std),
+                  border-color .15s var(--ease-std),
+                  transform .12s var(--ease-std);
+    }
+    .wf-back-btn:hover { color: var(--text); border-color: var(--border-2); }
+    .wf-back-btn:active { transform: scale(0.94); }
+    .wf-back-btn svg {
+      width: 14px; height: 14px;
+    }
+    .vae-toggle-container {
+      display: flex; align-items: center; gap: 10px;
+    }
+    .vae-toggle-btn {
+      width: 32px; height: 18px;
+      background: var(--surface-3);
+      border: 1px solid var(--border-2);
+      border-radius: 999px;
+      cursor: pointer;
+      position: relative;
+      transition: background .25s var(--ease-std), border-color .25s var(--ease-std);
+      flex-shrink: 0; padding: 0; outline: none;
+    }
+    .vae-toggle-btn:hover {
+      border-color: var(--border-3);
+    }
+    .vae-toggle-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+    .vae-toggle-knob {
+      position: absolute;
+      top: 2px; left: 2px;
+      width: 12px; height: 12px;
+      background: #fff;
+      border-radius: 50%;
+      transition: transform .35s var(--ease-pop), background .25s var(--ease-std);
+      display: block; pointer-events: none;
+    }
+    .vae-toggle-btn.active .vae-toggle-knob {
+      transform: translateX(14px);
+      background: var(--accent-text);
+    }
+    .vae-toggle-btn:focus-visible {
+      box-shadow: 0 0 0 3px var(--accent-soft);
+    }
+    .vae-toggle-label {
+      font-size: 12px; color: var(--text-2);
+      transition: color .2s;
+    }
+    .vae-toggle-btn.active + .vae-toggle-label {
+      color: var(--text);
     }
 
     /* Update modal */
@@ -1661,23 +1905,27 @@
     .setting-desc { font-size: 10px; color: var(--text-4); line-height: 1.5; margin-top: 1px; }
 
     /* Mode-specific visibility */
-    .flux-only, .wan-only, .hunyuan-only, .video-only, .image-only { display: none; }
+    .flux-only, .wan-only, .hunyuan-only, .video-only, .image-only, .hires-fix-only, .face-detailer-only { display: none; }
     .sidebar:not(.mode-flux):not(.mode-wan):not(.mode-hunyuan) .sdxl-only,
     .sidebar:not(.mode-flux):not(.mode-wan):not(.mode-hunyuan) .image-only { display: block; }
-    
+
     .sidebar.mode-flux .flux-only { display: block; }
     .sidebar.mode-flux .image-only { display: block; }
     .sidebar.mode-flux .sdxl-only { display: none; }
-    
+
     .sidebar.mode-wan .wan-only { display: block; }
     .sidebar.mode-wan .video-only { display: block; }
     .sidebar.mode-wan .sdxl-only, .sidebar.mode-wan .image-only { display: none !important; }
     .sidebar.mode-wan #clip2-field { display: none !important; }
     .sidebar.mode-wan #clip-g2 { grid-template-columns: 1fr; }
-    
+
     .sidebar.mode-hunyuan .hunyuan-only { display: block; }
     .sidebar.mode-hunyuan .video-only { display: block; }
     .sidebar.mode-hunyuan .sdxl-only, .sidebar.mode-hunyuan .image-only { display: none !important; }
+
+    /* Workflow-specific visibility */
+    .sidebar.hires-fix .hires-fix-only { display: block !important; }
+    .sidebar.face-detailer .face-detailer-only { display: block !important; }
 
     /* Sidebar footer */
     .sidebar-foot {
@@ -3021,7 +3269,6 @@
         <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
       </svg>
     </button>
-    <div style="width:1px; height:16px; background:var(--border); margin-right:12px;"></div>
     <div class="conn">
       <div class="conn-dot" id="dot"></div>
       <span id="status-txt">Connecting</span>
@@ -3090,12 +3337,64 @@
             <span class="mode-switch-lbl" id="lbl-mode-video">Video Gen</span>
           </div>
         </div>
+        <div class="wf-menu-row" style="margin-top: 8px; border-top: 1px solid var(--border-2); padding-top: 8px;">
+          <button class="wf-browse-btn" type="button" onclick="openWorkflowBrowser(event)" title="Browse all workflows">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="7" height="7"></rect>
+              <rect x="14" y="3" width="7" height="7"></rect>
+              <rect x="14" y="14" width="7" height="7"></rect>
+              <rect x="3" y="14" width="7" height="7"></rect>
+            </svg>
+            Browse Workflows
+          </button>
+        </div>
       </div>
 
       <div class="sec sdxl-only">
         <div class="sec-label easy-hide" data-fav-key="checkpoint">Checkpoint</div>
         <div class="sec-label easy-show" style="display:none">Model</div>
-        <select id="ckpt-sel" class="loading-skeleton"><option value="">Loading…</option></select>
+        <select id="ckpt-sel"><option value="">Loading…</option></select>
+      </div>
+
+      <div class="sec sdxl-only">
+        <div class="sec-label">
+          <span>Custom VAE</span>
+          <button class="vae-toggle-btn" id="sdxl-vae-toggle" type="button" onclick="toggleSdxlVae()" title="Toggle custom VAE">
+            <span class="vae-toggle-knob"></span>
+          </button>
+        </div>
+        <div class="sdxl-vae-dropdown" id="sdxl-vae-dropdown" style="display:none; margin-top:8px;">
+          <select id="sdxl-vae-sel"><option value="">Loading…</option></select>
+        </div>
+      </div>
+
+      <div class="sec hires-fix-only">
+        <div class="sec-label" data-fav-key="upscaler">Upscaler Model</div>
+        <select id="upscaler-sel"><option value="">Loading…</option></select>
+      </div>
+
+      <div class="sec hires-fix-only">
+        <div class="slider-field">
+          <div class="slider-header">
+            <label data-fav-key="hires-denoise">HiRes Denoise</label>
+            <span class="slider-val" id="hires-denoise-val">0.35</span>
+          </div>
+          <input type="range" id="hires-denoise" min="0.0" max="1.0" value="0.35" step="0.05"
+                 oninput="syncSlider('hires-denoise')">
+        </div>
+        <div class="setting-desc">Denoise strength for the refinement pass in HiRes Fix.</div>
+      </div>
+
+      <div class="sec face-detailer-only">
+        <div class="slider-field">
+          <div class="slider-header">
+            <label data-fav-key="face-denoise">Face Detailer Denoise</label>
+            <span class="slider-val" id="face-denoise-val">0.5</span>
+          </div>
+          <input type="range" id="face-denoise" min="0.0" max="1.0" value="0.5" step="0.05"
+                 oninput="syncSlider('face-denoise')">
+        </div>
+        <div class="setting-desc">Denoise strength for face enhancement in Face Detailer.</div>
       </div>
 
       <div class="sec flux-only hunyuan-only wan-only">
@@ -3338,7 +3637,7 @@
     </div>
 
     <div class="sidebar-foot">
-      <div class="err-box" id="err"></div>
+      <div class="err-box" id="err" style="display:none"></div>
       <div class="vhs-warn-banner" id="vhs-warn" style="display:none">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="vhs-warn-icon">
           <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
@@ -3588,6 +3887,40 @@
     <div class="upd-actions">
       <button class="upd-btn" onclick="dismissConnFail()">Close</button>
       <button class="upd-btn primary" onclick="startComfyUI()">Start ComfyUI</button>
+    </div>
+  </div>
+</div>
+
+<!-- Workflow browser modal -->
+<div class="wf-browser-modal" id="wf-browser-modal" onclick="closeWorkflowBrowser()">
+  <div class="wf-browser-card" onclick="event.stopPropagation()">
+    <div class="wf-browser-header">
+      <div class="wf-browser-title">Browse Workflows</div>
+      <button class="wf-browser-close" onclick="closeWorkflowBrowser()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+    <div class="wf-browser-content">
+      <div class="wf-browser-sidebar">
+        <div class="wf-browser-filter-title">Filter by</div>
+        <div class="wf-browser-filters">
+          <button class="wf-browser-filter active" data-filter="all" onclick="filterWorkflows('all')">All</button>
+          <button class="wf-browser-filter" data-filter="simple" onclick="filterWorkflows('simple')">Simple</button>
+          <button class="wf-browser-filter" data-filter="regular" onclick="filterWorkflows('regular')">Regular</button>
+          <button class="wf-browser-filter" data-filter="advanced" onclick="filterWorkflows('advanced')">Advanced</button>
+        </div>
+      </div>
+      <div class="wf-browser-main">
+        <div class="wf-browser-search">
+          <input type="text" id="wf-search-input" placeholder="Search workflows..." oninput="searchWorkflows()">
+        </div>
+        <div class="wf-browser-grid" id="wf-browser-grid">
+          <!-- Workflow cards will be dynamically generated -->
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -3966,6 +4299,20 @@ function updateTrack(el) {
     } else {
       el.style.background = `linear-gradient(to right, var(--accent) 0%, var(--accent) ${redBoundary}%, ${redActive} ${redBoundary}%, ${redActive} ${pct}%, ${redBg} ${pct}%, ${redBg} 100%)`;
     }
+  } else if (el.id === 'hires-denoise') {
+    const safeStart = 0.3;
+    const safeEnd = 0.45;
+    const safeStartPct = ((safeStart - min) / (max - min)) * 100;
+    const safeEndPct = ((safeEnd - min) / (max - min)) * 100;
+    const redBg = 'rgba(255, 59, 48, 0.25)';
+    const redActive = '#ff3b30';
+    if (pct < safeStartPct) {
+      el.style.background = `linear-gradient(to right, ${redActive} 0%, ${redActive} ${pct}%, var(--border-2) ${pct}%, var(--border-2) ${safeStartPct}%, var(--accent) ${safeStartPct}%, var(--accent) ${safeEndPct}%, ${redBg} ${safeEndPct}%, ${redBg} 100%)`;
+    } else if (pct > safeEndPct) {
+      el.style.background = `linear-gradient(to right, ${redBg} 0%, ${redBg} ${safeStartPct}%, var(--accent) ${safeStartPct}%, var(--accent) ${safeEndPct}%, ${redActive} ${safeEndPct}%, ${redActive} ${pct}%, ${redBg} ${pct}%, ${redBg} 100%)`;
+    } else {
+      el.style.background = `linear-gradient(to right, ${redBg} 0%, ${redBg} ${safeStartPct}%, var(--accent) ${safeStartPct}%, var(--accent) ${pct}%, var(--border-2) ${pct}%, var(--border-2) ${safeEndPct}%, ${redBg} ${safeEndPct}%, ${redBg} 100%)`;
+    }
   } else {
     el.style.background = `linear-gradient(to right,var(--accent) 0%,var(--accent) ${pct}%,var(--border-2) ${pct}%,var(--border-2) 100%)`;
   }
@@ -3982,6 +4329,20 @@ function syncSlider(id) {
     if (valEl) {
       valEl.textContent = val;
       if (idx > 4) {
+        valEl.style.color = '#ff3b30';
+        valEl.style.fontWeight = 'bold';
+      } else {
+        valEl.style.color = '';
+        valEl.style.fontWeight = '';
+      }
+    }
+    updateTrack(el);
+  } else if (id === 'hires-denoise') {
+    const val = parseFloat(el.value);
+    const valEl = $('hires-denoise-val');
+    if (valEl) {
+      valEl.textContent = val.toFixed(2);
+      if (val < 0.3 || val > 0.45) {
         valEl.style.color = '#ff3b30';
         valEl.style.fontWeight = 'bold';
       } else {
@@ -4427,7 +4788,16 @@ function setMode(m) {
   state.mode = m;
   if (typeof isFavOn === 'function' && isFavOn('workflow')) saveFavValue('workflow');
   
-  $('sidebar').className = 'sidebar mode-' + m;
+  const sidebar = $('sidebar');
+  sidebar.className = 'sidebar mode-' + m;
+  if (currentWorkflow) {
+    if (currentWorkflow.workflowType.includes('hires')) {
+      sidebar.classList.add('hires-fix');
+    }
+    if (currentWorkflow.workflowType.includes('facedetailer')) {
+      sidebar.classList.add('face-detailer');
+    }
+  }
   
   if (state.genType === 'image') {
     state.lastImageMode = m;
@@ -4436,8 +4806,10 @@ function setMode(m) {
   }
 
   const isTab1 = (m === 'sdxl' || m === 'wan');
-  $('tab-sdxl').className = isTab1 ? 'tab active' : 'tab';
-  $('tab-flux').className = !isTab1 ? 'tab active' : 'tab';
+  const tabSdxl = $('tab-sdxl');
+  const tabFlux = $('tab-flux');
+  if (tabSdxl) tabSdxl.className = isTab1 ? 'tab active' : 'tab';
+  if (tabFlux) tabFlux.className = !isTab1 ? 'tab active' : 'tab';
 
   const cfg = $('cfg');
   if (m === 'flux' || m === 'hunyuan') {
@@ -4562,6 +4934,7 @@ async function loadModels() {
     updateSaveImageExtendedWarning();
 
     fill('ckpt-sel',  info?.CheckpointLoaderSimple?.input?.required?.ckpt_name?.[0] || [], 'No checkpoints');
+    $('ckpt-sel').classList.remove('loading-skeleton');
     
     const ggufUnets = info?.UnetLoaderGGUF?.input?.required?.unet_name?.[0] || [];
     const stdUnets = info?.UNETLoader?.input?.required?.unet_name?.[0] || [];
@@ -4578,6 +4951,7 @@ async function loadModels() {
     fill('clip2-sel', allClips, 'No CLIP models'); pickOptContaining('clip2-sel', 't5');
     
     fill('vae-sel',   info?.VAELoader?.input?.required?.vae_name?.[0] || [], 'No VAE models');
+    fill('upscaler-sel', info?.ImageUpscaleWithModel?.input?.required?.model_name?.[0] || [], 'No upscaler models');
     const loras = info?.LoraLoader?.input?.required?.lora_name?.[0] || [];
     for (const sid of ['lora1-sel', 'lora2-sel', 'easy-lora-sel']) {
       const sel = $(sid); sel.innerHTML = '<option value="">None</option>';
@@ -4818,6 +5192,599 @@ function toggleLock() {
   if (locked && !v('seed').trim() && state.lastSeed != null) $('seed').value = state.lastSeed;
 }
 
+function sdxlFaceDetailerWorkflow(seed) {
+  const { nodes, modelRef, clipRef } = buildLoraNodes(["1",0], ["1",1]);
+  const ref = getRefImagePayload();
+  let activeModel = modelRef;
+  const extra = {};
+  if (ref) {
+    const mode = (v('ref-mode') || 'general');
+    const weight = getRefDenoise();
+    extra["ip_load"]    = { class_type: "LoadImage", inputs: { image: ref.name } };
+
+    if (mode === 'faceid') {
+      extra["ip_unified"] = { class_type: "IPAdapterUnifiedLoaderFaceID", inputs: {
+        model: activeModel, preset: "FACEID PLUS V2", lora_strength: 0.8, provider: "CPU"
+      }};
+      extra["ip_apply"]   = { class_type: "IPAdapterFaceID", inputs: {
+        model: ["ip_unified", 0], ipadapter: ["ip_unified", 1],
+        image: ["ip_load", 0],
+        weight, weight_faceidv2: weight * 3,
+        weight_type: "linear", combine_embeds: "concat",
+        start_at: 0.0, end_at: 1.0, embeds_scaling: "V only"
+      }};
+    } else {
+      const preset = (mode === 'face') ? "PLUS FACE (portraits)" : "PLUS (high strength)";
+      extra["ip_unified"] = { class_type: "IPAdapterUnifiedLoader", inputs: { model: activeModel, preset } };
+      extra["ip_apply"]   = { class_type: "IPAdapter", inputs: {
+        model: ["ip_unified", 0], ipadapter: ["ip_unified", 1],
+        image: ["ip_load", 0],
+        weight, weight_type: "standard",
+        start_at: 0.0, end_at: 1.0
+      }};
+    }
+    activeModel = ["ip_apply", 0];
+  }
+
+  // Handle custom VAE
+  let vaeRef = ["1", 2];
+  if (useCustomVae && v('sdxl-vae-sel')) {
+    extra["vae_load"] = { class_type: "VAELoader", inputs: { vae_name: v('sdxl-vae-sel') } };
+    vaeRef = ["vae_load", 0];
+  }
+
+  const faceDenoise = n('face-denoise') || 0.5;
+
+  // Face Detailer workflow using Impact Pack nodes
+  return {
+    "1": { class_type: "CheckpointLoaderSimple", inputs: { ckpt_name: v('ckpt-sel') } },
+    ...nodes,
+    ...extra,
+    "2": { class_type: "CLIPTextEncode", inputs: { text: v('pos'), clip: clipRef } },
+    "3": { class_type: "CLIPTextEncode", inputs: { text: v('neg'), clip: clipRef } },
+    "4": { class_type: "EmptyLatentImage", inputs: { width: n('w'), height: n('h'), batch_size: getBatchSize() } },
+    "5": { class_type: "KSampler", inputs: {
+      model: activeModel, positive:["2",0], negative:["3",0], latent_image:["4",0],
+      seed, steps: n('steps'), cfg: n('cfg'),
+      sampler_name: v('sampler-sel'), scheduler: v('sched-sel'), denoise: 1.0
+    }},
+    "6": { class_type: "VAEDecodeTiled", inputs: {
+      samples:["5",0], vae: vaeRef,
+      tile_size: 512, overlap: 64, temporal_size: 64, temporal_overlap: 8
+    }},
+    "7": { class_type: "FaceDetailer", inputs: {
+      image: ["6", 0],
+      model: activeModel,
+      clip: clipRef,
+      positive: ["2", 0],
+      negative: ["3", 0],
+      vae: vaeRef,
+      guide_size: 256,
+      guide_size_for_crop: true,
+      max_size: 1024,
+      seed,
+      steps: 10,
+      cfg: 7.0,
+      denoise: faceDenoise,
+      noise_aug: 0.0,
+      sampler_name: "dpmpp_2m",
+      scheduler: "karras",
+      force_invert: false,
+      pad: 8,
+      cycle: 1
+    }},
+    "8": getSaveImageNodeConfig(["7",0])
+  };
+}
+
+function fluxGgufFaceDetailerWorkflow(seed) {
+  const { nodes, modelRef, clipRef } = buildLoraNodes(["1",0], ["2",0]);
+  const ref = getRefImagePayload();
+  let activeModel = modelRef;
+  const extra = {};
+  if (ref) {
+    const mode = (v('ref-mode') || 'general');
+    const weight = getRefDenoise();
+    extra["ip_load"]    = { class_type: "LoadImage", inputs: { image: ref.name } };
+    if (mode === 'faceid') {
+      extra["ip_unified"] = { class_type: "IPAdapterUnifiedLoaderFaceID", inputs: {
+        model: activeModel, preset: "FACEID PLUS V2", lora_strength: 0.8, provider: "CPU"
+      }};
+      extra["ip_apply"]   = { class_type: "IPAdapterFaceID", inputs: {
+        model: ["ip_unified", 0], ipadapter: ["ip_unified", 1],
+        image: ["ip_load", 0],
+        weight, weight_faceidv2: weight * 3,
+        weight_type: "linear", combine_embeds: "concat",
+        start_at: 0.0, end_at: 1.0, embeds_scaling: "V only"
+      }};
+    } else {
+      const preset = (mode === 'face') ? "PLUS FACE (portraits)" : "PLUS (high strength)";
+      extra["ip_unified"] = { class_type: "IPAdapterUnifiedLoader", inputs: { model: activeModel, preset } };
+      extra["ip_apply"]   = { class_type: "IPAdapter", inputs: {
+        model: ["ip_unified", 0], ipadapter: ["ip_unified", 1],
+        image: ["ip_load", 0],
+        weight, weight_type: "standard",
+        start_at: 0.0, end_at: 1.0
+      }};
+    }
+    activeModel = ["ip_apply", 0];
+  }
+
+  const faceDenoise = n('face-denoise') || 0.5;
+
+  return {
+    "1": { class_type: "UnetLoaderGGUF", inputs: { unet_name: v('unet-sel') } },
+    "2": { class_type: "DualCLIPLoaderGGUF", inputs: {
+      clip_name1: v('clip1-sel'), clip_name2: v('clip2-sel'), type:"flux"
+    }},
+    ...nodes,
+    ...extra,
+    "3": { class_type: "CLIPTextEncode", inputs: { text: v('pos'), clip: clipRef } },
+    "4": { class_type: "FluxGuidance", inputs: { conditioning: ["3",0], guidance: 3.5 } },
+    "5": { class_type: "EmptySD3LatentImage", inputs: { width: n('w'), height: n('h'), batch_size: getBatchSize() } },
+    "6": { class_type: "KSampler", inputs: {
+      model: activeModel, positive:["4",0], negative:["4",0], latent_image:["5",0],
+      seed, steps: n('steps'), cfg: 1.0,
+      sampler_name: v('sampler-sel'), scheduler: v('sched-sel'), denoise: 1.0
+    }},
+    "7": { class_type: "VAELoader", inputs: { vae_name: v('vae-sel') } },
+    "8": { class_type: "VAEDecode", inputs: { samples:["6",0], vae:["7",0] } },
+    "9": { class_type: "FaceDetailer", inputs: {
+      image: ["8", 0],
+      model: activeModel,
+      clip: clipRef,
+      positive: ["3", 0],
+      negative: ["3", 0],
+      vae: ["7", 0],
+      guide_size: 256,
+      guide_size_for_crop: true,
+      max_size: 1024,
+      seed,
+      steps: 10,
+      cfg: 1.0,
+      denoise: faceDenoise,
+      noise_aug: 0.0,
+      sampler_name: "dpmpp_2m",
+      scheduler: "karras",
+      force_invert: false,
+      pad: 8,
+      cycle: 1
+    }},
+    "10": getSaveImageNodeConfig(["9",0])
+  };
+}
+
+function fluxFaceDetailerWorkflow(seed) {
+  const { nodes, modelRef, clipRef } = buildLoraNodes(["1",0], ["2",0]);
+  const ref = getRefImagePayload();
+  let activeModel = modelRef;
+  const extra = {};
+  if (ref) {
+    const mode = (v('ref-mode') || 'general');
+    const weight = getRefDenoise();
+    extra["ip_load"]    = { class_type: "LoadImage", inputs: { image: ref.name } };
+    if (mode === 'faceid') {
+      extra["ip_unified"] = { class_type: "IPAdapterUnifiedLoaderFaceID", inputs: {
+        model: activeModel, preset: "FACEID PLUS V2", lora_strength: 0.8, provider: "CPU"
+      }};
+      extra["ip_apply"]   = { class_type: "IPAdapterFaceID", inputs: {
+        model: ["ip_unified", 0], ipadapter: ["ip_unified", 1],
+        image: ["ip_load", 0],
+        weight, weight_faceidv2: weight * 3,
+        weight_type: "linear", combine_embeds: "concat",
+        start_at: 0.0, end_at: 1.0, embeds_scaling: "V only"
+      }};
+    } else {
+      const preset = (mode === 'face') ? "PLUS FACE (portraits)" : "PLUS (high strength)";
+      extra["ip_unified"] = { class_type: "IPAdapterUnifiedLoader", inputs: { model: activeModel, preset } };
+      extra["ip_apply"]   = { class_type: "IPAdapter", inputs: {
+        model: ["ip_unified", 0], ipadapter: ["ip_unified", 1],
+        image: ["ip_load", 0],
+        weight, weight_type: "standard",
+        start_at: 0.0, end_at: 1.0
+      }};
+    }
+    activeModel = ["ip_apply", 0];
+  }
+
+  const faceDenoise = n('face-denoise') || 0.5;
+
+  return {
+    "1": { class_type: "UNETLoader", inputs: { unet_name: v('unet-sel') } },
+    "2": { class_type: "CLIPLoader", inputs: { clip_name: v('clip1-sel'), type: "flux" } },
+    "3": { class_type: "CLIPLoader", inputs: { clip_name: v('clip2-sel'), type: "flux" } },
+    ...nodes,
+    ...extra,
+    "4": { class_type: "CLIPTextEncode", inputs: { text: v('pos'), clip: ["2", 0] } },
+    "5": { class_type: "CLIPTextEncode", inputs: { text: v('pos'), clip: ["3", 0] } },
+    "6": { class_type: "CLIPTextEncode", inputs: { text: v('neg'), clip: ["2", 0] } },
+    "7": { class_type: "CLIPTextEncode", inputs: { text: v('neg'), clip: ["3", 0] } },
+    "8": { class_type: "ConditioningCombine", inputs: { condition_1: ["4", 0], condition_2: ["5", 0] } },
+    "9": { class_type: "ConditioningCombine", inputs: { condition_1: ["6", 0], condition_2: ["7", 0] } },
+    "10": { class_type: "FluxGuidance", inputs: { conditioning: ["8", 0], guidance: 3.5 } },
+    "11": { class_type: "EmptySD3LatentImage", inputs: { width: n('w'), height: n('h'), batch_size: getBatchSize() } },
+    "12": { class_type: "KSampler", inputs: {
+      model: activeModel, positive:["10",0], negative:["9",0], latent_image:["11",0],
+      seed, steps: n('steps'), cfg: 1.0,
+      sampler_name: v('sampler-sel'), scheduler: v('sched-sel'), denoise: 1.0
+    }},
+    "13": { class_type: "VAELoader", inputs: { vae_name: v('vae-sel') } },
+    "14": { class_type: "VAEDecode", inputs: { samples:["12",0], vae:["13",0] } },
+    "15": { class_type: "FaceDetailer", inputs: {
+      image: ["14", 0],
+      model: activeModel,
+      clip: clipRef,
+      positive: ["8", 0],
+      negative: ["9", 0],
+      vae: ["13", 0],
+      guide_size: 256,
+      guide_size_for_crop: true,
+      max_size: 1024,
+      seed,
+      steps: 10,
+      cfg: 1.0,
+      denoise: faceDenoise,
+      noise_aug: 0.0,
+      sampler_name: "dpmpp_2m",
+      scheduler: "karras",
+      force_invert: false,
+      pad: 8,
+      cycle: 1
+    }},
+    "16": getSaveImageNodeConfig(["15",0])
+  };
+}
+
+function faceDetailerWorkflow(seed) {
+  const { nodes, modelRef, clipRef } = buildLoraNodes(["1",0], ["1",1]);
+  const ref = getRefImagePayload();
+  let activeModel = modelRef;
+  const extra = {};
+  if (ref) {
+    const mode = (v('ref-mode') || 'general');
+    const weight = getRefDenoise();
+    extra["ip_load"]    = { class_type: "LoadImage", inputs: { image: ref.name } };
+
+    if (mode === 'faceid') {
+      extra["ip_unified"] = { class_type: "IPAdapterUnifiedLoaderFaceID", inputs: {
+        model: activeModel, preset: "FACEID PLUS V2", lora_strength: 0.8, provider: "CPU"
+      }};
+      extra["ip_apply"]   = { class_type: "IPAdapterFaceID", inputs: {
+        model: ["ip_unified", 0], ipadapter: ["ip_unified", 1],
+        image: ["ip_load", 0],
+        weight, weight_faceidv2: weight * 3,
+        weight_type: "linear", combine_embeds: "concat",
+        start_at: 0.0, end_at: 1.0, embeds_scaling: "V only"
+      }};
+    } else {
+      const preset = (mode === 'face') ? "PLUS FACE (portraits)" : "PLUS (high strength)";
+      extra["ip_unified"] = { class_type: "IPAdapterUnifiedLoader", inputs: { model: activeModel, preset } };
+      extra["ip_apply"]   = { class_type: "IPAdapter", inputs: {
+        model: ["ip_unified", 0], ipadapter: ["ip_unified", 1],
+        image: ["ip_load", 0],
+        weight, weight_type: "standard",
+        start_at: 0.0, end_at: 1.0
+      }};
+    }
+    activeModel = ["ip_apply", 0];
+  }
+
+  // Handle custom VAE
+  let vaeRef = ["1", 2]; // Default VAE from checkpoint
+  if (useCustomVae && v('sdxl-vae-sel')) {
+    extra["vae_load"] = { class_type: "VAELoader", inputs: { vae_name: v('sdxl-vae-sel') } };
+    vaeRef = ["vae_load", 0];
+  }
+
+  // Face Detailer workflow - basic SDXL generation with face enhancement
+  return {
+    "1": { class_type: "CheckpointLoaderSimple", inputs: { ckpt_name: v('ckpt-sel') } },
+    ...nodes,
+    ...extra,
+    "2": { class_type: "CLIPTextEncode", inputs: { text: v('pos'), clip: clipRef } },
+    "3": { class_type: "CLIPTextEncode", inputs: { text: v('neg'), clip: clipRef } },
+    "4": { class_type: "EmptyLatentImage", inputs: { width: n('w'), height: n('h'), batch_size: getBatchSize() } },
+    "5": { class_type: "KSampler", inputs: {
+      model: activeModel, positive:["2",0], negative:["3",0], latent_image:["4",0],
+      seed, steps: n('steps'), cfg: n('cfg'),
+      sampler_name: v('sampler-sel'), scheduler: v('sched-sel'), denoise: 1.0
+    }},
+    "6": { class_type: "VAEDecodeTiled", inputs: {
+      samples:["5",0], vae: vaeRef,
+      tile_size: 512, overlap: 64, temporal_size: 64, temporal_overlap: 8
+    }},
+    "7": getSaveImageNodeConfig(["6",0])
+  };
+}
+
+function sdxlHiresFixWorkflow(seed) {
+  const { nodes, modelRef, clipRef } = buildLoraNodes(["1",0], ["1",1]);
+  const ref = getRefImagePayload();
+  let activeModel = modelRef;
+  const extra = {};
+  if (ref) {
+    const mode = (v('ref-mode') || 'general');
+    const weight = getRefDenoise();
+    extra["ip_load"]    = { class_type: "LoadImage", inputs: { image: ref.name } };
+
+    if (mode === 'faceid') {
+      extra["ip_unified"] = { class_type: "IPAdapterUnifiedLoaderFaceID", inputs: {
+        model: activeModel, preset: "FACEID PLUS V2", lora_strength: 0.8, provider: "CPU"
+      }};
+      extra["ip_apply"]   = { class_type: "IPAdapterFaceID", inputs: {
+        model: ["ip_unified", 0], ipadapter: ["ip_unified", 1],
+        image: ["ip_load", 0],
+        weight, weight_faceidv2: weight * 3,
+        weight_type: "linear", combine_embeds: "concat",
+        start_at: 0.0, end_at: 1.0, embeds_scaling: "V only"
+      }};
+    } else {
+      const preset = (mode === 'face') ? "PLUS FACE (portraits)" : "PLUS (high strength)";
+      extra["ip_unified"] = { class_type: "IPAdapterUnifiedLoader", inputs: { model: activeModel, preset } };
+      extra["ip_apply"]   = { class_type: "IPAdapter", inputs: {
+        model: ["ip_unified", 0], ipadapter: ["ip_unified", 1],
+        image: ["ip_load", 0],
+        weight, weight_type: "standard",
+        start_at: 0.0, end_at: 1.0
+      }};
+    }
+    activeModel = ["ip_apply", 0];
+  }
+
+  // HiRes Fix: two-pass generation with upscaler
+  const targetWidth = n('w');
+  const targetHeight = n('h');
+  const initialWidth = Math.floor(targetWidth / 2);
+  const initialHeight = Math.floor(targetHeight / 2);
+  const hiresDenoise = n('hires-denoise') || 0.35;
+
+  // Handle custom VAE
+  let vaeRef = ["1", 2]; // Default VAE from checkpoint
+  if (useCustomVae && v('sdxl-vae-sel')) {
+    extra["vae_load"] = { class_type: "VAELoader", inputs: { vae_name: v('sdxl-vae-sel') } };
+    vaeRef = ["vae_load", 0];
+  }
+
+  return {
+    "1": { class_type: "CheckpointLoaderSimple", inputs: { ckpt_name: v('ckpt-sel') } },
+    ...nodes,
+    ...extra,
+    "2": { class_type: "CLIPTextEncode", inputs: { text: v('pos'), clip: clipRef } },
+    "3": { class_type: "CLIPTextEncode", inputs: { text: v('neg'), clip: clipRef } },
+    "4": { class_type: "EmptyLatentImage", inputs: { width: initialWidth, height: initialHeight, batch_size: getBatchSize() } },
+    "5": { class_type: "KSampler", inputs: {
+      model: activeModel, positive:["2",0], negative:["3",0], latent_image:["4",0],
+      seed, steps: Math.floor(n('steps') * 0.7), cfg: n('cfg'),
+      sampler_name: v('sampler-sel'), scheduler: v('sched-sel'), denoise: 1.0
+    }},
+    "6": { class_type: "VAEDecode", inputs: { samples: ["5", 0], vae: vaeRef } },
+    "7": { class_type: "ImageScale", inputs: { image: ["6", 0], width: targetWidth, height: targetHeight, upscale_method: "lanczos", crop: "disabled" } },
+    "8": { class_type: "VAEEncode", inputs: { pixels: ["7", 0], vae: vaeRef } },
+    "9": { class_type: "KSampler", inputs: {
+      model: activeModel, positive:["2",0], negative:["3",0], latent_image:["8",0],
+      seed, steps: Math.floor(n('steps') * 0.3), cfg: n('cfg'),
+      sampler_name: v('sampler-sel'), scheduler: v('sched-sel'), denoise: hiresDenoise
+    }},
+    "10": { class_type: "VAEDecode", inputs: { samples: ["9", 0], vae: vaeRef } },
+    "11": getSaveImageNodeConfig(["10",0])
+  };
+}
+
+function fluxGgufHiresFixWorkflow(seed) {
+  const { nodes, modelRef, clipRef } = buildLoraNodes(["1",0], ["2",0]);
+  const ref = getRefImagePayload();
+  let activeModel = modelRef;
+  const extra = {};
+  if (ref) {
+    const mode = (v('ref-mode') || 'general');
+    const weight = getRefDenoise();
+    extra["ip_load"]    = { class_type: "LoadImage", inputs: { image: ref.name } };
+    if (mode === 'faceid') {
+      extra["ip_unified"] = { class_type: "IPAdapterUnifiedLoaderFaceID", inputs: {
+        model: activeModel, preset: "FACEID PLUS V2", lora_strength: 0.8, provider: "CPU"
+      }};
+      extra["ip_apply"]   = { class_type: "IPAdapterFaceID", inputs: {
+        model: ["ip_unified", 0], ipadapter: ["ip_unified", 1],
+        image: ["ip_load", 0],
+        weight, weight_faceidv2: weight * 3,
+        weight_type: "linear", combine_embeds: "concat",
+        start_at: 0.0, end_at: 1.0, embeds_scaling: "V only"
+      }};
+    } else {
+      const preset = (mode === 'face') ? "PLUS FACE (portraits)" : "PLUS (high strength)";
+      extra["ip_unified"] = { class_type: "IPAdapterUnifiedLoader", inputs: { model: activeModel, preset } };
+      extra["ip_apply"]   = { class_type: "IPAdapter", inputs: {
+        model: ["ip_unified", 0], ipadapter: ["ip_unified", 1],
+        image: ["ip_load", 0],
+        weight, weight_type: "standard",
+        start_at: 0.0, end_at: 1.0
+      }};
+    }
+    activeModel = ["ip_apply", 0];
+  }
+
+  // HiRes Fix: two-pass generation with upscaler
+  const targetWidth = n('w');
+  const targetHeight = n('h');
+  const initialWidth = Math.floor(targetWidth / 2);
+  const initialHeight = Math.floor(targetHeight / 2);
+  const hiresDenoise = n('hires-denoise') || 0.35;
+
+  return {
+    "1": { class_type: "UnetLoaderGGUF", inputs: { unet_name: v('unet-sel') } },
+    "2": { class_type: "DualCLIPLoaderGGUF", inputs: {
+      clip_name1: v('clip1-sel'), clip_name2: v('clip2-sel'), type:"flux"
+    }},
+    ...nodes,
+    ...extra,
+    "3": { class_type: "CLIPTextEncode", inputs: { text: v('pos'), clip: clipRef } },
+    "4": { class_type: "FluxGuidance",   inputs: { conditioning: ["3",0], guidance: 3.5 } },
+    "5": { class_type: "EmptySD3LatentImage", inputs: { width: initialWidth, height: initialHeight, batch_size: getBatchSize() } },
+    "6": { class_type: "KSampler", inputs: {
+      model: activeModel, positive:["4",0], negative:["4",0], latent_image:["5",0],
+      seed, steps: Math.floor(n('steps') * 0.7), cfg: 1.0,
+      sampler_name: v('sampler-sel'), scheduler: v('sched-sel'), denoise: 1.0
+    }},
+    "7": { class_type: "VAELoader", inputs: { vae_name: v('vae-sel') } },
+    "8": { class_type: "VAEDecode", inputs: { samples:["6",0], vae:["7",0] } },
+    "9": { class_type: "ImageScale", inputs: { image: ["8", 0], width: targetWidth, height: targetHeight, upscale_method: "lanczos", crop: "disabled" } },
+    "10": { class_type: "VAEEncode", inputs: { pixels: ["9", 0], vae: ["7", 0] } },
+    "11": { class_type: "KSampler", inputs: {
+      model: activeModel, positive:["4",0], negative:["4",0], latent_image:["10",0],
+      seed, steps: Math.floor(n('steps') * 0.3), cfg: 1.0,
+      sampler_name: v('sampler-sel'), scheduler: v('sched-sel'), denoise: hiresDenoise
+    }},
+    "12": { class_type: "VAEDecode", inputs: { samples:["11",0], vae:["7",0] } },
+    "13": getSaveImageNodeConfig(["12",0])
+  };
+}
+
+function fluxHiresFixWorkflow(seed) {
+  const { nodes, modelRef, clipRef } = buildLoraNodes(["1",0], ["2",0]);
+  const ref = getRefImagePayload();
+  let activeModel = modelRef;
+  const extra = {};
+  if (ref) {
+    const mode = (v('ref-mode') || 'general');
+    const weight = getRefDenoise();
+    extra["ip_load"]    = { class_type: "LoadImage", inputs: { image: ref.name } };
+    if (mode === 'faceid') {
+      extra["ip_unified"] = { class_type: "IPAdapterUnifiedLoaderFaceID", inputs: {
+        model: activeModel, preset: "FACEID PLUS V2", lora_strength: 0.8, provider: "CPU"
+      }};
+      extra["ip_apply"]   = { class_type: "IPAdapterFaceID", inputs: {
+        model: ["ip_unified", 0], ipadapter: ["ip_unified", 1],
+        image: ["ip_load", 0],
+        weight, weight_faceidv2: weight * 3,
+        weight_type: "linear", combine_embeds: "concat",
+        start_at: 0.0, end_at: 1.0, embeds_scaling: "V only"
+      }};
+    } else {
+      const preset = (mode === 'face') ? "PLUS FACE (portraits)" : "PLUS (high strength)";
+      extra["ip_unified"] = { class_type: "IPAdapterUnifiedLoader", inputs: { model: activeModel, preset } };
+      extra["ip_apply"]   = { class_type: "IPAdapter", inputs: {
+        model: ["ip_unified", 0], ipadapter: ["ip_unified", 1],
+        image: ["ip_load", 0],
+        weight, weight_type: "standard",
+        start_at: 0.0, end_at: 1.0
+      }};
+    }
+    activeModel = ["ip_apply", 0];
+  }
+
+  // HiRes Fix: two-pass generation with upscaler
+  const targetWidth = n('w');
+  const targetHeight = n('h');
+  const initialWidth = Math.floor(targetWidth / 2);
+  const initialHeight = Math.floor(targetHeight / 2);
+  const hiresDenoise = n('hires-denoise') || 0.35;
+
+  return {
+    "1": { class_type: "UNETLoader", inputs: { unet_name: v('unet-sel') } },
+    "2": { class_type: "CLIPLoader", inputs: { clip_name: v('clip1-sel'), type: "flux" } },
+    "3": { class_type: "CLIPLoader", inputs: { clip_name: v('clip2-sel'), type: "flux" } },
+    ...nodes,
+    ...extra,
+    "4": { class_type: "CLIPTextEncode", inputs: { text: v('pos'), clip: ["2", 0] } },
+    "5": { class_type: "CLIPTextEncode", inputs: { text: v('pos'), clip: ["3", 0] } },
+    "6": { class_type: "CLIPTextEncode", inputs: { text: v('neg'), clip: ["2", 0] } },
+    "7": { class_type: "CLIPTextEncode", inputs: { text: v('neg'), clip: ["3", 0] } },
+    "8": { class_type: "ConditioningCombine", inputs: { condition_1: ["4", 0], condition_2: ["5", 0] } },
+    "9": { class_type: "ConditioningCombine", inputs: { condition_1: ["6", 0], condition_2: ["7", 0] } },
+    "10": { class_type: "FluxGuidance", inputs: { conditioning: ["8", 0], guidance: 3.5 } },
+    "11": { class_type: "EmptySD3LatentImage", inputs: { width: initialWidth, height: initialHeight, batch_size: getBatchSize() } },
+    "12": { class_type: "KSampler", inputs: {
+      model: activeModel, positive:["10",0], negative:["9",0], latent_image:["11",0],
+      seed, steps: Math.floor(n('steps') * 0.7), cfg: 1.0,
+      sampler_name: v('sampler-sel'), scheduler: v('sched-sel'), denoise: 1.0
+    }},
+    "13": { class_type: "VAELoader", inputs: { vae_name: v('vae-sel') } },
+    "14": { class_type: "VAEDecode", inputs: { samples:["12",0], vae:["13",0] } },
+    "15": { class_type: "ImageScale", inputs: { image: ["14", 0], width: targetWidth, height: targetHeight, upscale_method: "lanczos", crop: "disabled" } },
+    "16": { class_type: "VAEEncode", inputs: { pixels: ["15", 0], vae: ["13", 0] } },
+    "17": { class_type: "KSampler", inputs: {
+      model: activeModel, positive:["10",0], negative:["9",0], latent_image:["16",0],
+      seed, steps: Math.floor(n('steps') * 0.3), cfg: 1.0,
+      sampler_name: v('sampler-sel'), scheduler: v('sched-sel'), denoise: hiresDenoise
+    }},
+    "18": { class_type: "VAEDecode", inputs: { samples:["17",0], vae:["13",0] } },
+    "19": getSaveImageNodeConfig(["18",0])
+  };
+}
+
+function hiresfixWorkflow(seed) {
+  const { nodes, modelRef, clipRef } = buildLoraNodes(["1",0], ["1",1]);
+  const ref = getRefImagePayload();
+  let activeModel = modelRef;
+  const extra = {};
+  if (ref) {
+    const mode = (v('ref-mode') || 'general');
+    const weight = getRefDenoise();
+    extra["ip_load"]    = { class_type: "LoadImage", inputs: { image: ref.name } };
+
+    if (mode === 'faceid') {
+      extra["ip_unified"] = { class_type: "IPAdapterUnifiedLoaderFaceID", inputs: {
+        model: activeModel, preset: "FACEID PLUS V2", lora_strength: 0.8, provider: "CPU"
+      }};
+      extra["ip_apply"]   = { class_type: "IPAdapterFaceID", inputs: {
+        model: ["ip_unified", 0], ipadapter: ["ip_unified", 1],
+        image: ["ip_load", 0],
+        weight, weight_faceidv2: weight * 3,
+        weight_type: "linear", combine_embeds: "concat",
+        start_at: 0.0, end_at: 1.0, embeds_scaling: "V only"
+      }};
+    } else {
+      const preset = (mode === 'face') ? "PLUS FACE (portraits)" : "PLUS (high strength)";
+      extra["ip_unified"] = { class_type: "IPAdapterUnifiedLoader", inputs: { model: activeModel, preset } };
+      extra["ip_apply"]   = { class_type: "IPAdapter", inputs: {
+        model: ["ip_unified", 0], ipadapter: ["ip_unified", 1],
+        image: ["ip_load", 0],
+        weight, weight_type: "standard",
+        start_at: 0.0, end_at: 1.0
+      }};
+    }
+    activeModel = ["ip_apply", 0];
+  }
+
+  // HiRes Fix: two-pass generation
+  const upscaleFactor = 2.0;
+  const targetWidth = n('w');
+  const targetHeight = n('h');
+  const initialWidth = Math.floor(targetWidth / upscaleFactor);
+  const initialHeight = Math.floor(targetHeight / upscaleFactor);
+
+  // Handle custom VAE
+  let vaeRef = ["1", 2]; // Default VAE from checkpoint
+  if (useCustomVae && v('sdxl-vae-sel')) {
+    extra["vae_load"] = { class_type: "VAELoader", inputs: { vae_name: v('sdxl-vae-sel') } };
+    vaeRef = ["vae_load", 0];
+  }
+
+  return {
+    "1": { class_type: "CheckpointLoaderSimple", inputs: { ckpt_name: v('ckpt-sel') } },
+    ...nodes,
+    ...extra,
+    "2": { class_type: "CLIPTextEncode", inputs: { text: v('pos'), clip: clipRef } },
+    "3": { class_type: "CLIPTextEncode", inputs: { text: v('neg'), clip: clipRef } },
+    "4": { class_type: "EmptyLatentImage", inputs: { width: initialWidth, height: initialHeight, batch_size: getBatchSize() } },
+    "5": { class_type: "KSampler", inputs: {
+      model: activeModel, positive:["2",0], negative:["3",0], latent_image:["4",0],
+      seed, steps: Math.floor(n('steps') * 0.7), cfg: n('cfg'),
+      sampler_name: v('sampler-sel'), scheduler: v('sched-sel'), denoise: 1.0
+    }},
+    "6": { class_type: "VAEDecode", inputs: { samples: ["5", 0], vae: vaeRef } },
+    "7": { class_type: "ImageScale", inputs: { image: ["6", 0], width: targetWidth, height: targetHeight, upscale_method: "lanczos", crop: "disabled" } },
+    "8": { class_type: "VAEEncode", inputs: { pixels: ["7", 0], vae: vaeRef } },
+    "9": { class_type: "KSampler", inputs: {
+      model: activeModel, positive:["2",0], negative:["3",0], latent_image:["8",0],
+      seed, steps: Math.floor(n('steps') * 0.3), cfg: n('cfg'),
+      sampler_name: v('sampler-sel'), scheduler: v('sched-sel'), denoise: 0.35
+    }},
+    "10": { class_type: "VAEDecode", inputs: { samples: ["9", 0], vae: vaeRef } },
+    "11": getSaveImageNodeConfig(["10",0])
+  };
+}
+
 function sdxlWorkflow(seed) {
   const { nodes, modelRef, clipRef } = buildLoraNodes(["1",0], ["1",1]);
   const ref = getRefImagePayload();
@@ -4851,7 +5818,20 @@ function sdxlWorkflow(seed) {
     }
     activeModel = ["ip_apply", 0];
   }
-  return {
+
+  // Handle custom VAE
+  let vaeRef = ["1", 2]; // Default VAE from checkpoint
+  let vaeDecodeNode = "6";
+  let saveNode = "7";
+
+  if (useCustomVae && v('sdxl-vae-sel')) {
+    extra["vae_load"] = { class_type: "VAELoader", inputs: { vae_name: v('sdxl-vae-sel') } };
+    vaeRef = ["vae_load", 0];
+    vaeDecodeNode = "vae_decode";
+    saveNode = "save";
+  }
+
+  const baseWorkflow = {
     "1": { class_type: "CheckpointLoaderSimple", inputs: { ckpt_name: v('ckpt-sel') } },
     ...nodes,
     ...extra,
@@ -4862,13 +5842,21 @@ function sdxlWorkflow(seed) {
       model: activeModel, positive:["2",0], negative:["3",0], latent_image:["4",0],
       seed, steps: n('steps'), cfg: n('cfg'),
       sampler_name: v('sampler-sel'), scheduler: v('sched-sel'), denoise: 1.0
-    }},
-    "6": { class_type: "VAEDecodeTiled", inputs: {
-      samples:["5",0], vae:["1",2],
-      tile_size: 512, overlap: 64, temporal_size: 64, temporal_overlap: 8
-    }},
-    "7": getSaveImageNodeConfig(["6",0])
+    }}
   };
+
+  if (useCustomVae && v('sdxl-vae-sel')) {
+    baseWorkflow[vaeDecodeNode] = { class_type: "VAEDecode", inputs: { samples: ["5", 0], vae: vaeRef } };
+    baseWorkflow[saveNode] = getSaveImageNodeConfig([vaeDecodeNode, 0]);
+  } else {
+    baseWorkflow["6"] = { class_type: "VAEDecodeTiled", inputs: {
+      samples:["5",0], vae: vaeRef,
+      tile_size: 512, overlap: 64, temporal_size: 64, temporal_overlap: 8
+    }};
+    baseWorkflow["7"] = getSaveImageNodeConfig(["6",0]);
+  }
+
+  return baseWorkflow;
 }
 
 function getRefImagePayload() {
@@ -4876,6 +5864,63 @@ function getRefImagePayload() {
   const r = state.refImage;
   if (!r || !r.name || r.uploading) return null;
   return { name: r.name, subfolder: r.subfolder || '', type: r.type || 'input' };
+}
+
+function fluxStandardWorkflow(seed) {
+  const { nodes, modelRef, clipRef } = buildLoraNodes(["1",0], ["2",0]);
+  const ref = getRefImagePayload();
+  let activeModel = modelRef;
+  const extra = {};
+  if (ref) {
+    const mode = (v('ref-mode') || 'general');
+    const weight = getRefDenoise();
+    extra["ip_load"]    = { class_type: "LoadImage", inputs: { image: ref.name } };
+    if (mode === 'faceid') {
+      extra["ip_unified"] = { class_type: "IPAdapterUnifiedLoaderFaceID", inputs: {
+        model: activeModel, preset: "FACEID PLUS V2", lora_strength: 0.8, provider: "CPU"
+      }};
+      extra["ip_apply"]   = { class_type: "IPAdapterFaceID", inputs: {
+        model: ["ip_unified", 0], ipadapter: ["ip_unified", 1],
+        image: ["ip_load", 0],
+        weight, weight_faceidv2: weight * 3,
+        weight_type: "linear", combine_embeds: "concat",
+        start_at: 0.0, end_at: 1.0, embeds_scaling: "V only"
+      }};
+    } else {
+      const preset = (mode === 'face') ? "PLUS FACE (portraits)" : "PLUS (high strength)";
+      extra["ip_unified"] = { class_type: "IPAdapterUnifiedLoader", inputs: { model: activeModel, preset } };
+      extra["ip_apply"]   = { class_type: "IPAdapter", inputs: {
+        model: ["ip_unified", 0], ipadapter: ["ip_unified", 1],
+        image: ["ip_load", 0],
+        weight, weight_type: "standard",
+        start_at: 0.0, end_at: 1.0
+      }};
+    }
+    activeModel = ["ip_apply", 0];
+  }
+  return {
+    "1": { class_type: "UNETLoader", inputs: { unet_name: v('unet-sel') } },
+    "2": { class_type: "CLIPLoader", inputs: { clip_name: v('clip1-sel'), type: "flux" } },
+    "3": { class_type: "CLIPLoader", inputs: { clip_name: v('clip2-sel'), type: "flux" } },
+    ...nodes,
+    ...extra,
+    "4": { class_type: "CLIPTextEncode", inputs: { text: v('pos'), clip: ["2", 0] } },
+    "5": { class_type: "CLIPTextEncode", inputs: { text: v('pos'), clip: ["3", 0] } },
+    "6": { class_type: "CLIPTextEncode", inputs: { text: v('neg'), clip: ["2", 0] } },
+    "7": { class_type: "CLIPTextEncode", inputs: { text: v('neg'), clip: ["3", 0] } },
+    "8": { class_type: "ConditioningCombine", inputs: { condition_1: ["4", 0], condition_2: ["5", 0] } },
+    "9": { class_type: "ConditioningCombine", inputs: { condition_1: ["6", 0], condition_2: ["7", 0] } },
+    "10": { class_type: "FluxGuidance", inputs: { conditioning: ["8", 0], guidance: 3.5 } },
+    "11": { class_type: "EmptySD3LatentImage", inputs: { width: n('w'), height: n('h'), batch_size: getBatchSize() } },
+    "12": { class_type: "KSampler", inputs: {
+      model: activeModel, positive:["10",0], negative:["9",0], latent_image:["11",0],
+      seed, steps: n('steps'), cfg: 1.0,
+      sampler_name: v('sampler-sel'), scheduler: v('sched-sel'), denoise: 1.0
+    }},
+    "13": { class_type: "VAELoader", inputs: { vae_name: v('vae-sel') } },
+    "14": { class_type: "VAEDecode", inputs: { samples:["12",0], vae:["13",0] } },
+    "15": getSaveImageNodeConfig(["14",0])
+  };
 }
 
 function fluxWorkflow(seed) {
@@ -5025,8 +6070,30 @@ async function generate() {
 
   const seed = getSeed();
   let wf;
-  if (state.mode === 'flux') wf = fluxWorkflow(seed);
-  else if (state.mode === 'sdxl') wf = sdxlWorkflow(seed);
+  if (state.mode === 'flux') {
+    if (currentWorkflow && currentWorkflow.workflowType === 'flux') {
+      wf = fluxStandardWorkflow(seed);
+    } else if (currentWorkflow && currentWorkflow.workflowType === 'flux-gguf-hires') {
+      wf = fluxGgufHiresFixWorkflow(seed);
+    } else if (currentWorkflow && currentWorkflow.workflowType === 'flux-hires') {
+      wf = fluxHiresFixWorkflow(seed);
+    } else if (currentWorkflow && currentWorkflow.workflowType === 'flux-gguf-facedetailer') {
+      wf = fluxGgufFaceDetailerWorkflow(seed);
+    } else if (currentWorkflow && currentWorkflow.workflowType === 'flux-facedetailer') {
+      wf = fluxFaceDetailerWorkflow(seed);
+    } else {
+      wf = fluxWorkflow(seed);
+    }
+  }
+  else if (state.mode === 'sdxl') {
+    if (currentWorkflow && currentWorkflow.workflowType === 'sdxl-hires') {
+      wf = sdxlHiresFixWorkflow(seed);
+    } else if (currentWorkflow && currentWorkflow.workflowType === 'sdxl-facedetailer') {
+      wf = sdxlFaceDetailerWorkflow(seed);
+    } else {
+      wf = sdxlWorkflow(seed);
+    }
+  }
   else if (state.mode === 'wan') wf = wanWorkflow(seed);
   else if (state.mode === 'hunyuan') wf = hunyuanWorkflow(seed);
 
@@ -5917,6 +6984,8 @@ document.addEventListener('keydown', e => {
     if (e.key === 'Escape')          closeViewer();
     else if (e.key === 'ArrowLeft')  { e.preventDefault(); viewerStep(-1); }
     else if (e.key === 'ArrowRight') { e.preventDefault(); viewerStep(1); }
+  } else if ($('wf-browser-modal').classList.contains('show')) {
+    if (e.key === 'Escape') closeWorkflowBrowser();
   }
 });
 
@@ -6011,6 +7080,296 @@ function toggleWfMenu(ev) {
   const open = !menu.classList.contains('open');
   menu.classList.toggle('open', open);
   btn.classList.toggle('open', open);
+}
+
+// Workflow browser functionality
+const WORKFLOWS = [
+  {
+    id: 'flux',
+    name: 'FLUX',
+    tag: 'regular',
+    description: 'Standard FLUX model generation (non-GGUF)',
+    customNodes: [],
+    workflowType: 'flux'
+  },
+  {
+    id: 'sdxl-hires',
+    name: 'SDXL + HiRes Fix',
+    tag: 'regular',
+    description: 'SDXL with two-pass high-resolution upscaling and refinement',
+    customNodes: [],
+    workflowType: 'sdxl-hires'
+  },
+  {
+    id: 'flux-gguf-hires',
+    name: 'FLUX GGUF + HiRes Fix',
+    tag: 'regular',
+    description: 'FLUX GGUF with two-pass high-resolution upscaling and refinement',
+    customNodes: [],
+    workflowType: 'flux-gguf-hires'
+  },
+  {
+    id: 'flux-hires',
+    name: 'FLUX + HiRes Fix',
+    tag: 'regular',
+    description: 'FLUX with two-pass high-resolution upscaling and refinement',
+    customNodes: [],
+    workflowType: 'flux-hires'
+  },
+  {
+    id: 'sdxl-facedetailer',
+    name: 'SDXL + Face Detailer',
+    tag: 'advanced',
+    description: 'SDXL with automatic face detection and enhancement using Impact Pack',
+    customNodes: ['ComfyUI-Impact-Pack'],
+    workflowType: 'sdxl-facedetailer'
+  },
+  {
+    id: 'flux-gguf-facedetailer',
+    name: 'FLUX GGUF + Face Detailer',
+    tag: 'advanced',
+    description: 'FLUX GGUF with automatic face detection and enhancement using Impact Pack',
+    customNodes: ['ComfyUI-Impact-Pack'],
+    workflowType: 'flux-gguf-facedetailer'
+  },
+  {
+    id: 'flux-facedetailer',
+    name: 'FLUX + Face Detailer',
+    tag: 'advanced',
+    description: 'FLUX with automatic face detection and enhancement using Impact Pack',
+    customNodes: ['ComfyUI-Impact-Pack'],
+    workflowType: 'flux-facedetailer'
+  }
+];
+
+let currentFilter = 'all';
+let currentWorkflow = null;
+
+function openWorkflowBrowser(ev) {
+  if (ev) ev.stopPropagation();
+  $('wf-menu').classList.remove('open');
+  $('wf-more-btn').classList.remove('open');
+  $('wf-browser-modal').classList.add('show');
+  renderWorkflowCards();
+}
+
+function closeWorkflowBrowser() {
+  $('wf-browser-modal').classList.remove('show');
+}
+
+function filterWorkflows(filter) {
+  currentFilter = filter;
+  document.querySelectorAll('.wf-browser-filter').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.filter === filter);
+  });
+  renderWorkflowCards();
+}
+
+function searchWorkflows() {
+  renderWorkflowCards();
+}
+
+function renderWorkflowCards() {
+  const grid = $('wf-browser-grid');
+  const searchTerm = $('wf-search-input').value.toLowerCase();
+  
+  const filtered = WORKFLOWS.filter(wf => {
+    const matchesFilter = currentFilter === 'all' || wf.tag === currentFilter;
+    const matchesSearch = wf.name.toLowerCase().includes(searchTerm) || 
+                         wf.description.toLowerCase().includes(searchTerm);
+    return matchesFilter && matchesSearch;
+  });
+  
+  grid.innerHTML = filtered.map(wf => {
+    const missingNodes = checkMissingCustomNodes(wf.customNodes);
+    const buttonHtml = missingNodes.length > 0
+      ? `<button class="wf-card-btn install" onclick="installMissingNodes('${wf.id}')">Install Missing Nodes</button>`
+      : `<button class="wf-card-btn load" onclick="loadWorkflow('${wf.id}')">Load Workflow</button>`;
+    
+    return `
+      <div class="wf-card" data-wf-id="${wf.id}">
+        <div class="wf-card-header">
+          <div class="wf-card-title">${wf.name}</div>
+          <div class="wf-card-tag ${wf.tag}">${wf.tag}</div>
+        </div>
+        <div class="wf-card-desc">${wf.description}</div>
+        <div class="wf-card-actions">
+          ${buttonHtml}
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function checkMissingCustomNodes(requiredNodes) {
+  if (!requiredNodes || requiredNodes.length === 0) return [];
+  // This will need to check against ComfyUI's object_info
+  // For now, return empty array - will implement actual detection
+  return [];
+}
+
+async function installMissingNodes(workflowId) {
+  const workflow = WORKFLOWS.find(w => w.id === workflowId);
+  if (!workflow) return;
+  
+  const missingNodes = checkMissingCustomNodes(workflow.customNodes);
+  if (missingNodes.length === 0) {
+    loadWorkflow(workflowId);
+    return;
+  }
+  
+  // Install missing nodes
+  for (const node of missingNodes) {
+    try {
+      await fetch(`/api/install-node/${node}`, { method: 'POST' });
+    } catch (e) {
+      console.error(`Failed to install node ${node}:`, e);
+    }
+  }
+  
+  // Re-render cards after installation
+  renderWorkflowCards();
+}
+
+function loadWorkflow(workflowId) {
+  const workflow = WORKFLOWS.find(w => w.id === workflowId);
+  if (!workflow) return;
+  
+  currentWorkflow = workflow;
+  try { localStorage.setItem('somni-current-workflow', workflowId); } catch(e) {}
+  closeWorkflowBrowser();
+
+  // Modify workflow selector UI to show workflow name
+  const tabsContainer = document.querySelector('.wf-row .tabs');
+  tabsContainer.innerHTML = `
+    <button class="tab active" id="tab-custom">${workflow.name}</button>
+  `;
+
+  // Add back button (only if it doesn't already exist)
+  const wfRow = document.querySelector('.wf-row');
+  let backBtn = document.querySelector('.wf-back-btn');
+  if (!backBtn) {
+    backBtn = document.createElement('button');
+    backBtn.className = 'wf-back-btn';
+    backBtn.type = 'button';
+    backBtn.onclick = restoreDefaultWorkflows;
+    backBtn.innerHTML = `
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="15 18 9 12 15 6"></polyline>
+      </svg>
+    `;
+    wfRow.insertBefore(backBtn, tabsContainer);
+  }
+  
+  // Set mode based on workflow type
+  if (workflow.workflowType === 'wan' || workflow.workflowType === 'hunyuan') {
+    state.genType = 'video';
+    updateModeUI();
+  } else {
+    state.genType = 'image';
+    updateModeUI();
+  }
+  
+  // Show/hide workflow-specific UI sections
+  const sidebar = document.querySelector('.sidebar');
+  sidebar.classList.remove('hires-fix', 'face-detailer');
+  
+  if (workflow.workflowType.includes('hires')) {
+    sidebar.classList.add('hires-fix');
+  }
+  if (workflow.workflowType.includes('facedetailer')) {
+    sidebar.classList.add('face-detailer');
+  }
+  
+  // Load the appropriate workflow
+  switch (workflow.workflowType) {
+    case 'flux':
+      state.mode = 'flux';
+      setMode('flux');
+      break;
+    case 'sdxl-hires':
+      state.mode = 'sdxl';
+      setMode('sdxl');
+      break;
+    case 'flux-gguf-hires':
+      state.mode = 'flux';
+      setMode('flux');
+      break;
+    case 'flux-hires':
+      state.mode = 'flux';
+      setMode('flux');
+      break;
+    case 'sdxl-facedetailer':
+      state.mode = 'sdxl';
+      setMode('sdxl');
+      break;
+    case 'flux-gguf-facedetailer':
+      state.mode = 'flux';
+      setMode('flux');
+      break;
+    case 'flux-facedetailer':
+      state.mode = 'flux';
+      setMode('flux');
+      break;
+  }
+}
+
+function restoreDefaultWorkflows() {
+  currentWorkflow = null;
+  try { localStorage.removeItem('somni-current-workflow'); } catch(e) {}
+  
+  // Remove back button
+  const backBtn = document.querySelector('.wf-back-btn');
+  if (backBtn) backBtn.remove();
+  
+  // Remove workflow-specific classes
+  const sidebar = document.querySelector('.sidebar');
+  sidebar.classList.remove('hires-fix', 'face-detailer');
+  
+  // Restore default tabs
+  const tabsContainer = document.querySelector('.wf-row .tabs');
+  tabsContainer.innerHTML = `
+    <button class="tab active" id="tab-sdxl" onclick="onTabClick(0)">SDXL</button>
+    <button class="tab" id="tab-flux" onclick="onTabClick(1)">FLUX GGUF</button>
+  `;
+  
+  // Reset mode to SDXL and trigger proper UI update
+  state.mode = 'sdxl';
+  setMode('sdxl');
+  onTabClick(0);
+}
+
+function updateModeUI() {
+  const imageLabel = $('lbl-mode-image');
+  const videoLabel = $('lbl-mode-video');
+  const toggleBtn = $('mode-toggle-btn');
+
+  if (state.genType === 'image') {
+    imageLabel.classList.add('active');
+    videoLabel.classList.remove('active');
+    toggleBtn.style.transform = 'translateX(0)';
+  } else {
+    imageLabel.classList.remove('active');
+    videoLabel.classList.add('active');
+    toggleBtn.style.transform = 'translateX(18px)';
+  }
+}
+
+// SDXL VAE toggle functionality
+let useCustomVae = false;
+
+function toggleSdxlVae() {
+  useCustomVae = !useCustomVae;
+  const toggleBtn = $('sdxl-vae-toggle');
+  const dropdown = $('sdxl-vae-dropdown');
+
+  toggleBtn.classList.toggle('active', useCustomVae);
+  dropdown.style.display = useCustomVae ? 'block' : 'none';
+
+  // Populate VAE dropdown if not already populated
+  if (useCustomVae && $('sdxl-vae-sel').options.length <= 1) {
+    fill('sdxl-vae-sel', info?.VAELoader?.input?.required?.vae_name?.[0] || [], 'No VAE models');
+  }
 }
 function getSavePrefix() {
   const v = ($('save-prefix')?.value || '').trim();
@@ -6470,10 +7829,13 @@ async function loadReleases() {
     }
     const releases = await response.json();
     
+    // Filter out nightly release
+    const filteredReleases = releases.filter(release => release.tag_name !== 'nightly');
+    
     const releasesContainer = $('settings-releases');
     releasesContainer.innerHTML = '';
     
-    releases.forEach((release, index) => {
+    filteredReleases.forEach((release, index) => {
       const isLatest = index === 0;
       const isNewer = compareVersions(release.tag_name, currentVersion) > 0;
       const isOlder = compareVersions(release.tag_name, currentVersion) < 0;
@@ -6728,7 +8090,19 @@ function initSomni() {
   attachFavStars();
   wireFavListeners();
   applyFavValues();                              // restores text/number/slider values immediately
-  loadModels().then(() => applyFavValues());     // restores select values after options load
+  loadModels().then(() => {
+    applyFavValues();     // restores select values after options load
+    // Restore saved workflow if exists
+    try {
+      const savedWorkflowId = localStorage.getItem('somni-current-workflow');
+      if (savedWorkflowId) {
+        const workflow = WORKFLOWS.find(w => w.id === savedWorkflowId);
+        if (workflow) {
+          loadWorkflow(savedWorkflowId);
+        }
+      }
+    } catch(e) {}
+  });
   loadHistory();
   initVersion();
   checkForUpdate();

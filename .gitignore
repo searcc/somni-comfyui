@@ -19,10 +19,12 @@ Thumbs.db
 # Agents
 .claude/
 .openjet/
+.devin/
 
 push-nightly.bat
 
 desktop/
+webv/
 
 # Large files
 cloudflared.exe
