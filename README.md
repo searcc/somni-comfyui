@@ -1,3 +1,4 @@
+# Try [**somni Cloud**](https://aethelian.eu/pages/szearcc/somni-comfyui/cloud) now!
 <div align="center">
   <img src="icon.png" width="80" alt="somni">
 
