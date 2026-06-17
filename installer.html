@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>somni installer</title>
+  <link rel="icon" href="icon.png">
+  <style>
+    @font-face {
+      font-family: 'Chillax';
+      font-weight: 300;
+      font-style: normal;
+      src: url('fonts/Chillax/Fonts/WEB/fonts/Chillax-Light.woff2') format('woff2'),
+           url('fonts/Chillax/Fonts/WEB/fonts/Chillax-Light.woff') format('woff'),
+           url('fonts/Chillax/Fonts/WEB/fonts/Chillax-Light.ttf') format('truetype'),
+           url('fonts/Chillax/Fonts/WEB/fonts/Chillax-Light.eot') format('embedded-opentype');
+      font-display: swap;
+    }
+    :root {
+      --bg:        #161618;
+      --bg-2:      #1c1c1f;
+      --surface:   #1f1f22;
+      --surface-2: #26262a;
+      --surface-3: #2e2e33;
+      --surface-4: #38383d;
+
+      --border:    rgba(255,255,255,0.07);
+      --border-2:  rgba(255,255,255,0.11);
+      --border-3:  rgba(255,255,255,0.18);
+
+      --text:      #ececee;
+      --text-2:    #b4b4ba;
+      --text-3:    #80808a;
+      --text-4:    #50505a;
+
+      --accent:      #ffffff;
+      --accent-hov:  #e0e0e0;
+      --accent-soft: rgba(255,255,255,0.10);
+      --accent-ring: rgba(255,255,255,0.35);
+
+      --red:   #e25d57;
+      --green: #4fb86d;
+      --amber: #d6a02d;
+
+      --r-sm:   8px;
+      --r-md:  10px;
+      --r-lg:  14px;
+      --r-xl:  18px;
+
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.25);
+      --shadow-lg: 0 16px 40px rgba(0,0,0,0.35);
+
+      --ease-out:    cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-std:    cubic-bezier(0.4, 0, 0.2, 1);
+      --ease-spring: cubic-bezier(0.34, 1.4, 0.64, 1);
+      --ease-pop:    cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes fade-up   { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes pop-in    { from { opacity: 0; transform: translateY(8px) scale(0.96); } to { opacity: 1; transform: translateY(0) scale(1); } }
+    @keyframes glow      { 0%,100% { box-shadow: 0 0 0 0 rgba(255,255,255,0.0); } 50% { box-shadow: 0 0 0 6px rgba(255,255,255,0.06); } }
+    @keyframes spin      { to { transform: rotate(360deg); } }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+    body {
+      font-family: 'Chillax', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 14px;
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    button, input, select, textarea { font-family: inherit; }
+
+    .page {
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+    }
+    header {
+      height: 56px;
+      padding: 0 24px;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center;
+      flex-shrink: 0;
+      background: var(--bg);
+    }
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .brand-icon {
+      width: 26px; height: 26px;
+      filter: brightness(0) invert(1);
+      transition: transform .55s var(--ease-spring);
+    }
+    .brand:hover .brand-icon { transform: rotate(-12deg) scale(1.08); }
+    .brand-name { font-size: 15px; font-weight: 300; letter-spacing: -0.01em; }
+    .brand-tag {
+      margin-left: 8px;
+      padding: 2px 7px;
+      background: var(--surface-3);
+      border-radius: 4px;
+      font-size: 10px; font-weight: 300;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      color: var(--text-2);
+    }
+
+    main {
+      flex: 1; min-height: 0;
+      overflow-y: auto;
+      padding: 36px 24px 80px;
+    }
+    .wrap {
+      width: 100%;
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 16px 0 40px;
+      animation: fade-up .55s var(--ease-out);
+    }
+    .hero-icon {
+      width: 64px; height: 64px;
+      margin: 0 auto 18px;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.04));
+      border: 1px solid var(--border-2);
+      font-size: 30px;
+    }
+    .hero h1 {
+      font-size: 32px;
+      font-weight: 300;
+      letter-spacing: -0.02em;
+      margin-bottom: 10px;
+    }
+    .hero p {
+      color: var(--text-3);
+      font-size: 15px;
+      max-width: 460px;
+      margin: 0 auto;
+    }
+
+    .step {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      padding: 22px 24px;
+      margin-bottom: 16px;
+      display: flex; gap: 18px;
+      animation: fade-up .55s var(--ease-out) both;
+      transition: border-color .25s var(--ease-std), transform .25s var(--ease-std);
+    }
+    .step:nth-of-type(1) { animation-delay: .05s; }
+    .step:nth-of-type(2) { animation-delay: .10s; }
+    .step:nth-of-type(3) { animation-delay: .15s; }
+    .step:nth-of-type(4) { animation-delay: .20s; }
+    .step:hover { border-color: var(--border-2); }
+
+    .step-num {
+      width: 30px; height: 30px;
+      flex-shrink: 0;
+      border-radius: 50%;
+      background: var(--surface-3);
+      border: 1px solid var(--border-2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 300;
+      color: var(--text-2);
+      font-variant-numeric: tabular-nums;
+      transition: background .25s var(--ease-std), color .25s var(--ease-std), border-color .25s var(--ease-std);
+    }
+    .step.done .step-num {
+      background: var(--green);
+      color: #0c2614;
+      border-color: var(--green);
+    }
+    .step-body {
+      flex: 1; min-width: 0;
+    }
+    .step-title {
+      font-size: 16px; font-weight: 300;
+      margin-bottom: 4px;
+    }
+    .step-desc {
+      font-size: 13px; color: var(--text-3);
+      margin-bottom: 14px;
+    }
+
+    .input-row { display: flex; gap: 8px; }
+    .input-row input {
+      flex: 1; min-width: 0;
+      height: 38px; padding: 0 12px;
+      background: var(--bg-2);
+      border: 1px solid var(--border-2);
+      border-radius: var(--r-md);
+      color: var(--text);
+      font-size: 13.5px;
+      outline: none;
+      font-family: ui-monospace, 'SF Mono', monospace;
+      transition: border-color .15s, box-shadow .2s;
+    }
+    .input-row input:hover { border-color: var(--border-3); }
+    .input-row input:focus { border-color: var(--accent-ring); box-shadow: 0 0 0 3px var(--accent-soft); }
+    .input-row input::placeholder { color: var(--text-4); }
+
+    .btn {
+      height: 38px; padding: 0 16px;
+      background: var(--surface-3);
+      border: 1px solid var(--border-2);
+      border-radius: var(--r-md);
+      color: var(--text);
+      font-size: 13px; font-weight: 300;
+      cursor: pointer;
+      display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+      transition: background .15s, border-color .15s, transform .15s var(--ease-spring);
+    }
+    .btn:hover { background: var(--surface-4); border-color: var(--border-3); transform: translateY(-1px); }
+    .btn:active { transform: scale(0.97); }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #111;
+      border-color: var(--accent);
+      font-weight: 300;
+    }
+    .btn-primary:hover { background: var(--accent-hov); border-color: var(--accent-hov); }
+
+    .status {
+      margin-top: 10px;
+      font-size: 12.5px;
+      display: none;
+      align-items: flex-start; gap: 7px;
+      line-height: 1.5;
+    }
+    .status.show { display: flex; animation: pop-in .3s var(--ease-out); }
+    .status-icon {
+      flex-shrink: 0;
+      width: 16px; height: 16px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin-top: 1px;
+    }
+    .status.ok    .status-icon { background: var(--green); color: #0c2614; }
+    .status.err   .status-icon { background: var(--red); color: #2c0e0d; }
+    .status.warn  .status-icon { background: var(--amber); color: #2a1f06; }
+    .status.info  .status-icon { background: var(--surface-3); color: var(--text-2); }
+    .status-icon svg { width: 10px; height: 10px; }
+    .status-text { color: var(--text-2); }
+    .status.err  .status-text { color: #f29c97; }
+    .status.warn .status-text { color: #e0b154; }
+    .status.ok   .status-text { color: var(--text); }
+
+    .opts { display: flex; flex-direction: column; gap: 8px; }
+    .opt {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 12px 14px;
+      background: var(--bg-2);
+      border: 1px solid var(--border-2);
+      border-radius: var(--r-md);
+      cursor: pointer;
+      transition: border-color .15s, background .15s, transform .15s var(--ease-spring);
+    }
+    .opt:hover { border-color: var(--border-3); background: var(--surface); }
+    .opt:active { transform: scale(0.99); }
+    .opt input[type="radio"] {
+      appearance: none;
+      width: 16px; height: 16px;
+      border: 1.5px solid var(--border-3);
+      border-radius: 50%;
+      margin-top: 2px;
+      flex-shrink: 0;
+      position: relative;
+      cursor: pointer;
+      transition: border-color .15s;
+    }
+    .opt input[type="radio"]:checked { border-color: var(--accent); }
+    .opt input[type="radio"]:checked::after {
+      content: '';
+      position: absolute;
+      top: 2px; left: 2px;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      animation: pop-in .25s var(--ease-pop);
+    }
+    .opt-body { flex: 1; }
+    .opt-title { font-size: 13.5px; font-weight: 300; color: var(--text); }
+    .opt-sub { font-size: 12px; color: var(--text-3); margin-top: 2px; }
+
+    .opt.selected { border-color: var(--accent-ring); background: var(--accent-soft); }
+
+    .sub-input {
+      margin-top: 10px;
+      max-height: 0; opacity: 0; overflow: hidden;
+      transition: max-height .3s var(--ease-out), opacity .25s, margin-top .3s var(--ease-out);
+    }
+    .sub-input.show { max-height: 200px; opacity: 1; }
+
+    .check-row {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 0;
+      cursor: pointer;
+      user-select: none;
+    }
+    .check-row input { display: none; }
+    .check-box {
+      width: 18px; height: 18px;
+      border: 1.5px solid var(--border-3);
+      border-radius: 4px;
+      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .15s, border-color .15s;
+    }
+    .check-row input:checked + .check-box {
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+    .check-box svg { width: 12px; height: 12px; color: #111; opacity: 0; transition: opacity .15s; }
+    .check-row input:checked + .check-box svg { opacity: 1; }
+    .check-label { font-size: 13.5px; color: var(--text); }
+    .check-sub { font-size: 12px; color: var(--text-3); margin-left: 28px; }
+
+    .install-bar {
+      margin-top: 24px;
+      padding: 20px 24px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 16px;
+      animation: fade-up .55s var(--ease-out) .25s both;
+    }
+    .install-bar-left { flex: 1; min-width: 0; }
+    .install-bar-title { font-size: 14px; font-weight: 300; }
+    .install-bar-sub { font-size: 12px; color: var(--text-3); margin-top: 2px; }
+    .install-btn {
+      height: 44px; padding: 0 24px;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+
+    .result {
+      display: none;
+      margin-top: 20px;
+      padding: 24px;
+      background: var(--surface);
+      border: 1px solid var(--border-2);
+      border-radius: var(--r-lg);
+      animation: pop-in .4s var(--ease-out);
+    }
+    .result.show { display: block; }
+    .result.ok { border-color: rgba(79,184,109,0.3); }
+    .result.err { border-color: rgba(226,93,87,0.3); }
+    .result-head { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+    .result-icon {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .result.ok .result-icon  { background: rgba(79,184,109,0.18); color: var(--green); animation: glow 2s var(--ease-out) infinite; }
+    .result.err .result-icon { background: rgba(226,93,87,0.18); color: var(--red); }
+    .result-icon svg { width: 18px; height: 18px; }
+    .result-title { font-size: 17px; font-weight: 300; }
+    .result-sub   { font-size: 13px; color: var(--text-3); margin-top: 2px; }
+    .file-list {
+      list-style: none;
+      padding: 12px 14px;
+      background: var(--bg-2);
+      border-radius: var(--r-md);
+      border: 1px solid var(--border);
+      margin: 14px 0;
+      font-family: ui-monospace, 'SF Mono', monospace;
+      font-size: 12.5px;
+    }
+    .file-list li {
+      display: flex; align-items: center; gap: 8px;
+      padding: 3px 0;
+      color: var(--text-2);
+    }
+    .file-list li::before {
+      content: '✓';
+      color: var(--green);
+      font-weight: 300;
+    }
+    .result-cta {
+      display: flex; flex-direction: column; gap: 8px;
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid var(--border);
+    }
+    .result-cta-title { font-size: 13px; font-weight: 300; }
+    .result-cta-files {
+      display: flex; flex-direction: column; gap: 6px;
+      font-size: 13px;
+    }
+    .result-cta-files code {
+      display: inline-block;
+      padding: 1px 6px;
+      background: var(--surface-3);
+      border-radius: 4px;
+      font-size: 12px;
+      color: var(--text);
+      margin-right: 8px;
+    }
+
+    .spinner {
+      width: 16px; height: 16px;
+      border: 2px solid var(--border-2);
+      border-top-color: currentColor;
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+      flex-shrink: 0;
+    }
+
+    .update-view {
+      display: none;
+      animation: fade-up .55s var(--ease-out);
+    }
+    .update-view.show { display: block; }
+
+    body.update-mode #install-hero,
+    body.update-mode .step,
+    body.update-mode .install-bar,
+    body.update-mode #result { display: none !important; }
+    .update-card-big {
+      background: var(--surface);
+      border: 1px solid var(--border-2);
+      border-radius: var(--r-lg);
+      padding: 32px;
+      margin-top: 8px;
+    }
+    .update-icon-big {
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(255,255,255,0.14), rgba(255,255,255,0.04));
+      border: 1px solid var(--border-2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 26px;
+      margin-bottom: 18px;
+    }
+    .update-h1 { font-size: 24px; font-weight: 300; letter-spacing: -0.01em; margin-bottom: 6px; }
+    .update-p  { font-size: 14px; color: var(--text-3); line-height: 1.55; }
+    .ver-line {
+      display: flex; gap: 10px; align-items: center;
+      margin: 18px 0 0;
+      padding: 12px 14px;
+      background: var(--bg-2);
+      border: 1px solid var(--border);
+      border-radius: var(--r-md);
+      font-size: 13px;
+      font-variant-numeric: tabular-nums;
+    }
+    .ver-chip {
+      padding: 3px 10px;
+      background: var(--surface-3);
+      border-radius: 4px;
+      font-weight: 300;
+      color: var(--text);
+    }
+    .ver-chip.new { background: var(--accent); color: #111; }
+    .ver-arrow { color: var(--text-4); }
+
+    .release-notes {
+      margin-top: 16px;
+      padding: 14px 16px;
+      background: var(--bg-2);
+      border: 1px solid var(--border);
+      border-radius: var(--r-md);
+      font-size: 12.5px;
+      color: var(--text-2);
+      line-height: 1.6;
+      max-height: 180px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      font-family: ui-monospace, 'SF Mono', monospace;
+    }
+    .release-notes:empty { display: none; }
+
+    .update-actions {
+      display: flex; gap: 10px; align-items: center;
+      margin-top: 22px;
+    }
+    .update-actions .spacer { flex: 1; }
+    .link-btn {
+      background: none; border: none;
+      color: var(--text-3); font-size: 13px;
+      cursor: pointer; padding: 0; font-family: inherit;
+      text-decoration: underline; text-decoration-color: var(--border-2);
+      text-underline-offset: 3px;
+      transition: color .15s;
+    }
+    .link-btn:hover { color: var(--text-2); }
+
+    .update-progress {
+      display: none;
+      margin-top: 18px;
+      padding: 14px 16px;
+      background: var(--bg-2);
+      border: 1px solid var(--border-2);
+      border-radius: var(--r-md);
+      font-size: 13px;
+      align-items: center;
+      gap: 10px;
+    }
+    .update-progress.show { display: flex; }
+    .update-progress-text { color: var(--text-2); }
+    .update-success {
+      display: none;
+      margin-top: 16px;
+      padding: 14px 16px;
+      background: rgba(79,184,109,0.08);
+      border: 1px solid rgba(79,184,109,0.3);
+      border-radius: var(--r-md);
+      color: #7dd692;
+      font-size: 13px;
+      animation: pop-in .35s var(--ease-out);
+    }
+    .update-success.show { display: block; }
+
+    footer {
+      padding: 16px 24px;
+      font-size: 11.5px; color: var(--text-4);
+      text-align: center;
+      border-top: 1px solid var(--border);
+    }
+    footer a { color: var(--text-3); text-decoration: none; }
+    footer a:hover { color: var(--text-2); }
+  </style>
+</head>
+<body>
+<div class="page">
+  <header>
+    <div class="brand">
+      <img src="icon.png" class="brand-icon" alt="">
+      <span class="brand-name">somni</span>
+      <span class="brand-tag">installer</span>
+    </div>
+  </header>
+
+  <main>
+    <div class="wrap">
+      <!-- Update view (shown when a newer release is on GitHub) ── -->
+      <div class="update-view" id="update-view">
+        <div class="update-card-big">
+          <div class="update-icon-big">✦</div>
+          <div class="update-h1" id="update-h1">somni update available</div>
+          <div class="update-p"  id="update-p">A newer release has been published on GitHub. Click <strong>Install Update</strong> and somni will download and apply it automatically.</div>
+          <div class="ver-line">
+            <span>You have</span>
+            <span class="ver-chip" id="update-cur">v—</span>
+            <span class="ver-arrow">→</span>
+            <span>Latest</span>
+            <span class="ver-chip new" id="update-new">v—</span>
+          </div>
+          <div class="release-notes" id="update-notes"></div>
+          <div class="update-progress" id="update-progress">
+            <span class="spinner"></span>
+            <span class="update-progress-text" id="update-progress-text">Downloading…</span>
+          </div>
+          <div class="update-success" id="update-success">
+            ✓ Update complete. somni has been updated to <strong id="update-success-ver">v—</strong>. You can close this window and relaunch somni.
+          </div>
+          <div class="update-actions">
+            <button class="link-btn" onclick="skipToInstall()">Skip update — go to install settings</button>
+            <span class="spacer"></span>
+            <button class="btn btn-primary" id="update-install-btn" onclick="doUpdateInstall()" style="height:42px;padding:0 22px;font-size:14px">Install Update</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Regular install flow ─────────────────────────────── -->
+      <section class="hero" id="install-hero">
+        <div class="hero-icon">✦</div>
+        <h1>Set up somni</h1>
+        <p>A modern, polished frontend for ComfyUI. This installer creates launch scripts wired to your setup. Takes 30 seconds.</p>
+      </section>
+
+      <!-- Step 1: ComfyUI directory ─────────────────────────── -->
+      <article class="step" id="step-1">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <div class="step-title">Where is ComfyUI?</div>
+          <div class="step-desc">Point us to the folder containing <code>main.py</code>.</div>
+          <div class="input-row">
+            <input type="text" id="comfy-dir" placeholder="C:\ComfyUI" spellcheck="false" autocomplete="off">
+            <button class="btn" onclick="verifyComfy()">Verify</button>
+          </div>
+          <div class="status" id="comfy-status"></div>
+        </div>
+      </article>
+
+      <!-- Step 2: Python environment ───────────────────────── -->
+      <article class="step" id="step-2">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <div class="step-title">How do you start ComfyUI's Python?</div>
+          <div class="step-desc">Pick whichever method you currently use to launch ComfyUI.</div>
+          <div class="opts" id="py-opts">
+            <label class="opt" data-py="portable">
+              <input type="radio" name="py-mode" value="portable">
+              <div class="opt-body">
+                <div class="opt-title">ComfyUI Portable</div>
+                <div class="opt-sub">Uses <code>python_embeded/python.exe</code> inside the ComfyUI folder. Common if you downloaded the .zip release.</div>
+              </div>
+            </label>
+            <label class="opt" data-py="venv">
+              <input type="radio" name="py-mode" value="venv">
+              <div class="opt-body">
+                <div class="opt-title">Virtual environment</div>
+                <div class="opt-sub">You activate a venv before running <code>python main.py</code>. Most common for manual git installs.</div>
+                <div class="sub-input" id="venv-input">
+                  <div class="input-row">
+                    <input type="text" id="venv-dir" placeholder="C:\comfy-venv" spellcheck="false" autocomplete="off">
+                    <button class="btn" onclick="verifyVenv()">Verify</button>
+                  </div>
+                  <div class="status" id="venv-status"></div>
+                </div>
+              </div>
+            </label>
+            <label class="opt" data-py="system">
+              <input type="radio" name="py-mode" value="system">
+              <div class="opt-body">
+                <div class="opt-title">System Python</div>
+                <div class="opt-sub">You just run <code>python main.py</code> with system-wide Python. Rare; only if you installed all deps globally.</div>
+              </div>
+            </label>
+          </div>
+          <div class="status" id="py-status"></div>
+        </div>
+      </article>
+
+      <!-- Step 3: Install location ─────────────────────────── -->
+      <article class="step" id="step-3">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <div class="step-title">Install somni where?</div>
+          <div class="step-desc">By default, somni lives in the folder it's running from. Pick another location to copy the files there.</div>
+          <div class="input-row">
+            <input type="text" id="install-dir" placeholder="..." spellcheck="false" autocomplete="off">
+            <button class="btn" onclick="verifyInstall()">Verify</button>
+          </div>
+          <div class="status" id="install-status"></div>
+        </div>
+      </article>
+
+      <!-- Step 4: Options ──────────────────────────────────── -->
+      <article class="step" id="step-4">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <div class="step-title">Final touches</div>
+          <div class="step-desc">A couple of small preferences for the launch scripts.</div>
+          <label class="check-row">
+            <input type="checkbox" id="opt-browser" checked>
+            <span class="check-box">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </span>
+            <span class="check-label">Open somni in browser automatically</span>
+          </label>
+          <div class="check-sub">When you launch the combined script, open <code>http://localhost:8080</code> after ComfyUI boots.</div>
+
+          <div style="height: 12px"></div>
+
+          <label class="check-row" style="align-items:flex-start">
+            <span style="display:flex;align-items:center;gap:10px;flex:1">
+              <span class="check-label" style="min-width:130px">ComfyUI boot delay</span>
+              <input type="number" id="boot-delay" value="8" min="1" max="60" step="1"
+                     style="width:70px;height:30px;padding:0 8px;background:var(--bg-2);border:1px solid var(--border-2);border-radius:6px;color:var(--text);font-size:13px;outline:none;font-variant-numeric:tabular-nums">
+              <span class="check-sub" style="margin-left:0">seconds before launching somni</span>
+            </span>
+          </label>
+        </div>
+      </article>
+
+      <!-- Final install bar ───────────────────────────────── -->
+      <div class="install-bar">
+        <div class="install-bar-left">
+          <div class="install-bar-title">Ready to install?</div>
+          <div class="install-bar-sub" id="install-summary">Complete the steps above first.</div>
+        </div>
+        <button class="btn btn-primary install-btn" id="install-btn" onclick="doInstall()" disabled>
+          <span id="install-btn-label">Install</span>
+        </button>
+      </div>
+
+      <div class="result" id="result"></div>
+    </div>
+  </main>
+
+  <footer>
+    <span>somni installer</span> · runs locally on port 8081 · close this window when done
+  </footer>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+
+const state = {
+  comfyOk: false,
+  comfyPath: '',
+  pyMode: '',
+  venvOk: false,
+  venvPath: '',
+  installOk: false,
+  installPath: '',
+};
+
+// ── API helpers ────────────────────────────────────────────────
+async function api(path, body) {
+  const r = await fetch(path, body ? { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(body) } : {});
+  return r.json();
+}
+
+function setStatus(id, kind, msg) {
+  const el = $(id);
+  el.className = 'status show ' + kind;
+  const icons = {
+    ok:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>',
+    err:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>',
+    warn: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',
+    info: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="13"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>',
+  };
+  el.innerHTML = `<span class="status-icon">${icons[kind] || icons.info}</span><span class="status-text">${msg}</span>`;
+}
+
+function clearStatus(id) { $(id).className = 'status'; $(id).innerHTML = ''; }
+
+function setDone(stepId, on) { $(stepId).classList.toggle('done', !!on); }
+
+// ── Step 1: ComfyUI dir ───────────────────────────────────────
+async function verifyComfy() {
+  const path = $('comfy-dir').value.trim();
+  if (!path) { setStatus('comfy-status', 'err', 'Please enter a path.'); return; }
+  setStatus('comfy-status', 'info', 'Checking…');
+  const r = await api('/api/verify-comfy', { path });
+  if (r.ok) {
+    state.comfyOk = true;
+    state.comfyPath = r.path;
+    $('comfy-dir').value = r.path;
+    const note = r.portable ? ' (portable Python detected)' : '';
+    setStatus('comfy-status', 'ok', `Looks good — main.py found.${note}`);
+    setDone('step-1', true);
+    if (r.portable) selectPyMode('portable');
+    // Auto-suggest install dir as <comfyDir>\somni (unless user has typed something)
+    if (!$('install-dir').dataset.userEdited) {
+      const sep = r.path.includes('\\') ? '\\' : '/';
+      $('install-dir').value = r.path + sep + 'somni';
+      verifyInstall();
+    }
+  } else {
+    state.comfyOk = false;
+    setStatus('comfy-status', 'err', r.reason);
+    setDone('step-1', false);
+  }
+  updateInstallBtn();
+}
+
+// ── Step 2: Python mode ───────────────────────────────────────
+function selectPyMode(mode) {
+  state.pyMode = mode;
+  document.querySelectorAll('#py-opts .opt').forEach(el => {
+    el.classList.toggle('selected', el.dataset.py === mode);
+    const r = el.querySelector('input[type="radio"]');
+    r.checked = el.dataset.py === mode;
+  });
+  $('venv-input').classList.toggle('show', mode === 'venv');
+  if (mode === 'venv' && state.venvOk) setDone('step-2', true);
+  else if (mode === 'portable' || mode === 'system') setDone('step-2', true);
+  else setDone('step-2', false);
+  updateInstallBtn();
+}
+
+document.querySelectorAll('#py-opts .opt').forEach(el => {
+  el.addEventListener('click', () => selectPyMode(el.dataset.py));
+});
+
+async function verifyVenv() {
+  const path = $('venv-dir').value.trim();
+  if (!path) { setStatus('venv-status', 'err', 'Please enter a venv path.'); return; }
+  setStatus('venv-status', 'info', 'Checking…');
+  const r = await api('/api/verify-venv', { path });
+  if (r.ok) {
+    state.venvOk = true;
+    state.venvPath = r.path;
+    $('venv-dir').value = r.path;
+    setStatus('venv-status', 'ok', `Valid virtual env — Scripts/python.exe found.`);
+    setDone('step-2', true);
+  } else {
+    state.venvOk = false;
+    setStatus('venv-status', 'err', r.reason);
+    setDone('step-2', false);
+  }
+  updateInstallBtn();
+}
+
+// ── Step 3: Install dir ───────────────────────────────────────
+async function verifyInstall() {
+  const path = $('install-dir').value.trim();
+  if (!path) { setStatus('install-status', 'err', 'Please enter a path.'); return; }
+  setStatus('install-status', 'info', 'Checking…');
+  const r = await api('/api/verify-install', { path });
+  if (r.ok) {
+    state.installOk = true;
+    state.installPath = r.path;
+    $('install-dir').value = r.path;
+    setStatus('install-status', 'ok', r.note || 'OK.');
+    setDone('step-3', true);
+  } else {
+    state.installOk = false;
+    setStatus('install-status', 'err', r.reason);
+    setDone('step-3', false);
+  }
+  updateInstallBtn();
+}
+
+// ── Install ───────────────────────────────────────────────────
+function updateInstallBtn() {
+  const stepsReady =
+    state.comfyOk &&
+    state.installOk &&
+    (state.pyMode === 'portable' || state.pyMode === 'system' || (state.pyMode === 'venv' && state.venvOk));
+  $('install-btn').disabled = !stepsReady;
+  $('install-summary').textContent = stepsReady
+    ? 'All set. Click Install to write the launch scripts.'
+    : 'Complete the steps above first.';
+  setDone('step-4', stepsReady);
+}
+
+async function doInstall() {
+  const btn = $('install-btn');
+  btn.disabled = true;
+  $('install-btn-label').innerHTML = '<span class="spinner"></span> Installing…';
+  const cfg = {
+    comfyDir:   state.comfyPath,
+    pythonMode: state.pyMode,
+    venvDir:    state.venvPath,
+    installDir: state.installPath,
+    openBrowser: $('opt-browser').checked,
+    bootDelay:  parseInt($('boot-delay').value, 10) || 8,
+  };
+  let r;
+  try { r = await api('/api/install', cfg); }
+  catch (e) { r = { ok: false, error: e.message }; }
+
+  $('install-btn-label').textContent = 'Install';
+  const out = $('result');
+  if (r.ok) {
+    out.className = 'result show ok';
+    out.innerHTML = `
+      <div class="result-head">
+        <div class="result-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <div>
+          <div class="result-title">somni is ready</div>
+          <div class="result-sub">Files written to <code style="background:var(--surface-3);padding:1px 5px;border-radius:4px">${r.installDir}</code></div>
+        </div>
+      </div>
+      <ul class="file-list">
+        ${r.files.map(f => `<li>${f}</li>`).join('')}
+      </ul>
+      <div class="result-cta">
+        <div class="result-cta-title">Next: launch somni</div>
+        <div class="result-cta-files">
+          <div><code>launch_comfyui_and_somni.bat</code> — starts ComfyUI and somni together (recommended)</div>
+          <div><code>launch_somni.bat</code> — starts only somni (if you already have ComfyUI running)</div>
+        </div>
+      </div>
+    `;
+    btn.textContent = 'Done';
+  } else {
+    out.className = 'result show err';
+    out.innerHTML = `
+      <div class="result-head">
+        <div class="result-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>
+        <div>
+          <div class="result-title">Installation failed</div>
+          <div class="result-sub">${r.error || 'Unknown error.'}</div>
+        </div>
+      </div>
+    `;
+    btn.disabled = false;
+  }
+  out.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+// Mark install-dir as user-edited so auto-suggestion doesn't overwrite it
+$('install-dir').addEventListener('input', () => {
+  $('install-dir').dataset.userEdited = '1';
+});
+
+// ── Update mode ───────────────────────────────────────────────
+let _hasUpdate = false;
+async function checkForUpdate() {
+  try {
+    const u = await api('/api/check-update');
+    if (u && u.hasUpdate && u.local && u.latest) {
+      _hasUpdate = true;
+      $('update-cur').textContent = 'v' + u.local;
+      $('update-new').textContent = 'v' + u.latest;
+      if (u.name)  $('update-h1').textContent = u.name;
+      if (u.body)  $('update-notes').textContent = u.body.length > 1000 ? u.body.slice(0, 1000) + '\n…' : u.body;
+      document.body.classList.add('update-mode');
+      $('update-view').classList.add('show');
+    }
+  } catch {}
+}
+
+function skipToInstall() {
+  document.body.classList.remove('update-mode');
+  $('update-view').classList.remove('show');
+}
+
+async function doUpdateInstall() {
+  const btn = $('update-install-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Updating…';
+  $('update-progress').classList.add('show');
+  $('update-progress-text').textContent = 'Downloading latest release from GitHub…';
+  try {
+    const r = await api('/api/install-update', {});
+    if (!r.ok) throw new Error(r.error || 'failed');
+    $('update-progress').classList.remove('show');
+    $('update-success').classList.add('show');
+    $('update-success-ver').textContent = 'v' + (r.newVersion || '?');
+    btn.style.display = 'none';
+  } catch (e) {
+    $('update-progress-text').textContent = 'Update failed: ' + e.message;
+    btn.disabled = false;
+    btn.innerHTML = 'Try again';
+  }
+}
+
+// ── Boot: auto-fill from detection / saved config ─────────────
+(async function init() {
+  try {
+    // Always check for an update first; if found, swap to the update view.
+    checkForUpdate();
+
+    const d = await api('/api/detect');
+    if (d.guessedComfy) $('comfy-dir').value = d.guessedComfy;
+
+    // If we have a saved config, restore mode + venv + install-dir
+    const saved = d.savedConfig || {};
+    if (saved.pythonMode) selectPyMode(saved.pythonMode);
+    if (saved.venvDir) $('venv-dir').value = saved.venvDir;
+    if (saved.installDir) {
+      $('install-dir').value = saved.installDir;
+      $('install-dir').dataset.userEdited = '1';   // preserve user's previous choice
+    }
+
+    // Auto-verify what we can
+    if ($('comfy-dir').value) verifyComfy();
+    if ($('install-dir').value) verifyInstall();
+    if (saved.pythonMode === 'venv' && saved.venvDir) verifyVenv();
+  } catch (e) {
+    console.error(e);
+  }
+})();
+</script>
+</body>
+</html>
