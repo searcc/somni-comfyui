@@ -22,6 +22,11 @@
 
 somni is a polished, opinionated frontend that runs alongside your existing ComfyUI install. It talks to ComfyUI over HTTP: your workflows, models, and outputs stay exactly where they are.
 
+**Available in three versions:**
+- **Web UI** - Run locally on your machine, connects to your ComfyUI installation
+- **Desktop Application** - Native Windows app with embedded browser, first-run configuration
+- **Cloud** - Hosted version with no complicated setup **at all** (try it at the top of this page)
+
 - **Easy mode**: a chat-style interface (think Gemini / ChatGPT) for one-prompt-and-go generation
 <div align="center">
   <img src="screenshots/somni-ui-easy.png" width="550" alt="somni UI Easy Mode">
@@ -43,7 +48,7 @@ somni is a polished, opinionated frontend that runs alongside your existing Comf
 ### Requirements
 
 - **ComfyUI** already installed and working ([download here](https://github.com/Comfy-Org/ComfyUI))
-- **Python 3.x** in your PATH (same one you'd use to run ComfyUI is fine)
+- **Python 3.x** in your PATH (for Web UI; Desktop app configures this during first run)
 - **Windows** (the launch scripts are `.bat` files; Linux/macOS support is on the roadmap)
 
 ### Steps (Web UI)
@@ -65,11 +70,11 @@ That's it. somni opens in your browser at `http://localhost:8080`.
 1. **Download** the latest [Windows EXE](../../releases/latest)
 2. **Execute the file**. A setup wizard should open
 3. **Choose somni install path** in the window and wait for somni to install
-4. **Walk through the 3 steps:**
+4. **Launch `somni.exe`**. On first run, a configuration dialog will appear:
    - Point to your ComfyUI folder
    - Pick how you launch its Python (portable / venv / system)
-   - Finalize configuration
-5. **Done.** Launch `somni.exe`
+   - Optionally create a launch script
+5. **Done.** somni opens and connects to your ComfyUI
 
 ### Steps (Desktop Application) v1.1.1 and lower
 
@@ -91,6 +96,8 @@ The launch script binds to `0.0.0.0`, so any device on your Wi-Fi can reach it.
 1. Find your PC's local IP (`ipconfig` → look for `IPv4 Address`, usually `192.168.x.x`)
 2. On your phone, open `http://<that-ip>:8080`
 3. Generate images from the couch
+
+**Note:** For the desktop application, you can also access somni from your phone by using your PC's local IP address in the browser.
 
 ---
 
@@ -114,6 +121,8 @@ Easiest path: open **ComfyUI Manager → Install Models**, search for "ipadapter
 
 ## ✦ Something went wrong?
 
+### Web UI
+
 If somni won't launch:
 
 - **Re-run `installer.bat`** — this won't touch your images or settings, it just regenerates the launch scripts
@@ -121,11 +130,22 @@ If somni won't launch:
 - **Port conflict?** Something else on `:8080` (full ComfyUI desktop app?) close it first
 - **MS Store Python stub** intercepting `python`: the installer handles this, but if it slipped through: `Settings → Apps → Advanced app settings → App execution aliases` → turn off the `python.exe` toggles
 
+### Desktop Application
+
+If the desktop app won't launch or connect:
+
+- **Re-run the configuration** — Delete `somni_config.json` from the installation directory and relaunch `somni.exe` to reconfigure
+- **Check the console output** — The Electron app shows Python errors in the console
+- **Port conflict?** Something else on `:8080` (full ComfyUI desktop app?) close it first
+- **ComfyUI not running?** The desktop app expects ComfyUI to be running. Start ComfyUI first, or use the optional launch script created during configuration
+
 If you find a bug or want a feature, [open an issue](../../issues).
 
 ---
 
 ## ✦ How it works (in a nutshell)
+
+### Web UI
 
 ```
 ┌──────────────┐    HTTP/WS     ┌──────────────────┐
@@ -141,6 +161,10 @@ If you find a bug or want a feature, [open an issue](../../issues).
 ```
 
 `server.py` is a tiny Python proxy (~200 lines, stdlib only). It serves `index.html` and forwards everything else to ComfyUI, stripping `Origin`/`Referer` headers so ComfyUI's loopback host-check passes. It also adds two endpoints: `/__list` for gallery thumbnails and `/__delete` for delete buttons because vanilla ComfyUI doesn't expose them.
+
+### Desktop Application
+
+The desktop application (somni.exe) is an Electron app that bundles `server.py` and the web UI. On first launch, it shows a configuration dialog to connect to your ComfyUI installation. The app spawns `server.py` as a child process and loads the web UI in an embedded browser window.
 
 The entire UI is one HTML file. No build step. No npm. No bundler. Open the source and you can change anything.
 
