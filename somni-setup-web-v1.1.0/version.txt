@@ -1,3 +1,0 @@
-1.1.0
-# Please do not edit the version number above (if you don't have to...)
-# I know it's tempting.
