@@ -60,7 +60,18 @@ somni is a polished, opinionated frontend that runs alongside your existing Comf
 
 That's it. somni opens in your browser at `http://localhost:8080`.
 
-### Steps (Desktop Application)
+### Steps (Desktop Application) v1.2.0 and higher
+
+1. **Download** the latest [Windows EXE](../../releases/latest)
+2. **Execute the file**. A setup wizard should open
+3. **Choose somni install path** in the window and wait for somni to install
+4. **Walk through the 3 steps:**
+   - Point to your ComfyUI folder
+   - Pick how you launch its Python (portable / venv / system)
+   - Finalize configuration
+5. **Done.** Launch `somni.exe`
+
+### Steps (Desktop Application) v1.1.1 and lower
 
 1. **Download** the latest [Windows release zip](../../releases/latest) and extract it anywhere
 2. **Run `installer.exe`**. An installer window should open
@@ -139,7 +150,6 @@ The entire UI is one HTML file. No build step. No npm. No bundler. Open the sour
 
 - Linux & macOS launch scripts (`.sh`)
 - Multi-image reference (IP-Adapter combine mode)
-- Workflow presets (save/load custom configurations)
 - Inpainting
 
 ---
