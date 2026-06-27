@@ -54,12 +54,17 @@ SOMNI_VERSION = _read_local_version()
 
 def _resolve_comfy_root():
     """Resolve the ComfyUI root folder for output/input/temp directory lookups.
-    Priority: somni_config.json (written by installer) → parent of DIR (legacy)."""
+    Priority: somni_config.json outputDir → somni_config.json comfyDir → parent of DIR (legacy)."""
     cfg_path = os.path.join(DIR, 'somni_config.json')
     if os.path.isfile(cfg_path):
         try:
             with open(cfg_path, 'r', encoding='utf-8') as f:
                 cfg = json.load(f)
+            # Check for explicit outputDir first (for Docker/volume mounts)
+            output_dir = cfg.get('outputDir')
+            if output_dir and os.path.isdir(output_dir):
+                return output_dir
+            # Fall back to comfyDir
             d = cfg.get('comfyDir')
             if d and os.path.isdir(d):
                 return d
@@ -255,6 +260,10 @@ class Handler(BaseHTTPRequestHandler):
                 for fname in sorted(os.listdir(folder), key=lambda f: os.path.getmtime(os.path.join(folder, f)), reverse=True):
                     if fname.lower().endswith(('.png', '.jpg', '.jpeg', '.webp', '.gif', '.mp4', '.webm')):
                         items.append({'filename': fname, 'subfolder': '', 'type': folder_type})
+            # If directory doesn't exist or is empty, return 404 to trigger frontend fallback to ComfyUI history API
+            if not items:
+                self.send_error(404, "Directory not found or empty")
+                return
             body = __import__('json').dumps(items).encode()
             self.send_response(200)
             self.send_header('Content-Type', 'application/json')
