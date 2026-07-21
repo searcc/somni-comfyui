@@ -1,2 +1,2 @@
-1.2.1
+1.3.0
 # Please do not edit the version number above (if you don't have to.)

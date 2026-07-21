@@ -54,17 +54,12 @@ SOMNI_VERSION = _read_local_version()
 
 def _resolve_comfy_root():
     """Resolve the ComfyUI root folder for output/input/temp directory lookups.
-    Priority: somni_config.json outputDir → somni_config.json comfyDir → parent of DIR (legacy)."""
+    Priority: somni_config.json comfyDir → parent of DIR (legacy)."""
     cfg_path = os.path.join(DIR, 'somni_config.json')
     if os.path.isfile(cfg_path):
         try:
             with open(cfg_path, 'r', encoding='utf-8') as f:
                 cfg = json.load(f)
-            # Check for explicit outputDir first (for Docker/volume mounts)
-            output_dir = cfg.get('outputDir')
-            if output_dir and os.path.isdir(output_dir):
-                return output_dir
-            # Fall back to comfyDir
             d = cfg.get('comfyDir')
             if d and os.path.isdir(d):
                 return d

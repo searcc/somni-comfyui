@@ -4,7 +4,7 @@ INSTALLATION
 
 
 
-1\. Run installer.bat
+1\. Run installer.bat or installer.sh depending on OS
 
 2\. Complete the installation process at http://localhost:8081 in your browser (should open automatically)
 

@@ -1,0 +1,5 @@
+{
+  "devDependencies": {
+    "electron-builder": "^26.15.3"
+  }
+}
