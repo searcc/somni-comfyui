@@ -1,0 +1,66 @@
+{
+  "name": "somni",
+  "version": "1.2.1",
+  "description": "frontend for ComfyUI",
+  "main": "main.js",
+  "author": "sZearcc",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "dist":  "electron-builder --win --linux"
+  },
+  "build": {
+    "appId": "io.somni.desktop",
+    "productName": "somni",
+    "directories": {
+      "output": "../dist/somni-app"
+    },
+    "files": [
+      "main.js",
+      "package.json"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        }
+      ],
+      "icon": "../../icon-256.ico",
+      "artifactName": "somni-setup-${version}.${ext}"
+    },
+    "linux": {
+      "target": [
+        {
+          "target": "AppImage",
+          "arch": ["x64"]
+        }
+      ],
+      "icon": "../../icon-256.png",
+      "artifactName": "somni-${version}.${ext}",
+      "category": "Graphics"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "installerIcon": "../../icon-256.ico",
+      "uninstallerIcon": "../../icon-256.ico",
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "somni"
+    },
+    "extraResources": [
+      { "from": "../../server.py",   "to": "server.py" },
+      { "from": "../../index.html",  "to": "index.html" },
+      { "from": "../../icon.png",    "to": "icon.png" },
+      { "from": "../../icon.ico",    "to": "icon.ico" },
+      { "from": "../../version.txt", "to": "version.txt" },
+      { "from": "../../README.md",   "to": "README.md" },
+      { "from": "../../LICENSE",     "to": "LICENSE" }
+    ]
+  },
+  "devDependencies": {
+    "electron": "^31.7.0",
+    "electron-builder": "^25.1.8"
+  }
+}

@@ -2,7 +2,9 @@
 somni_config.json
 somni_users.json
 launch_somni.bat
+launch_somni.sh
 launch_comfyui_and_somni.bat
+launch_comfyui_and_somni.sh
 
 # Python
 __pycache__/
@@ -23,20 +25,18 @@ Thumbs.db
 
 push-nightly.bat
 
-desktop/
+# Desktop build artifacts (but keep source files)
+desktop/dist/
+desktop/*/dist/
+desktop/*/node_modules/
+desktop/*/*.AppImage
+desktop/*/*.exe
+desktop/*/*.blockmap
+
 webv/
 
 # Large files
 cloudflared.exe
-*.exe
-
-# Installer files (don't belong in somni install dir)
-installer.bat
-installer.html
-installer.py
-
-# Other scripts
-start_cloudflare_tunnel.bat
 
 # AI agent files
 .aiexclude
