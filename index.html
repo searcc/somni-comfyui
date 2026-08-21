@@ -328,6 +328,13 @@
     }
     .settings-field {
       margin-bottom: 24px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--border);
+    }
+    .settings-field:last-child {
+      margin-bottom: 0;
+      padding-bottom: 0;
+      border-bottom: none;
     }
     .settings-label {
       display: block; font-size: 12px; font-weight: 500;
@@ -695,11 +702,175 @@
     .wf-browser-card {
       background: var(--surface);
       border: 1px solid var(--border-2);
-      border-radius: 16px;
-      width: 900px;
-      height: 600px;
-      display: flex; flex-direction: column;
-      overflow: hidden;
+      border-radius: var(--r-lg);
+      width: 100%; max-width: 540px;
+      max-height: 80vh; overflow-y: auto;
+      box-shadow: var(--shadow-lg);
+    }
+
+    /* Presets modal */
+    .presets-modal {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+      display: none; align-items: center; justify-content: center;
+      z-index: 260; padding: 24px;
+      animation: fade-up var(--dur-mid) var(--ease-out);
+    }
+    .presets-modal.show { display: flex; }
+    .presets-card {
+      background: var(--surface);
+      border: 1px solid var(--border-2);
+      border-radius: var(--r-lg);
+      width: 100%; max-width: 500px;
+      max-height: 80vh; overflow-y: auto;
+      box-shadow: var(--shadow-lg);
+    }
+    .presets-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 22px; border-bottom: 1px solid var(--border);
+    }
+    .presets-title { font-size: 16px; font-weight: 600; }
+    .presets-add-btn {
+      width: 32px; height: 32px;
+      background: var(--accent); color: #111;
+      border: none; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: transform .15s;
+    }
+    .presets-add-btn:hover { transform: scale(1.08); }
+    .presets-add-btn svg { width: 18px; height: 18px; }
+    .presets-list { padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+    .preset-card {
+      background: var(--bg-2);
+      border: 1px solid var(--border-2);
+      border-radius: var(--r-md);
+      padding: 14px 16px;
+      cursor: pointer;
+      transition: border-color .15s, background .15s;
+      position: relative;
+    }
+    .preset-card:hover { border-color: var(--border-3); background: var(--surface); }
+    .preset-text {
+      font-size: 13px; color: var(--text);
+      max-height: 60px; overflow: hidden;
+      display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;
+      line-clamp: 3;
+    }
+    .preset-menu-btn {
+      position: absolute; top: 10px; right: 10px;
+      width: 24px; height: 24px;
+      background: none; border: none;
+      color: var(--text-3);
+      cursor: pointer; opacity: 0;
+      transition: opacity .15s;
+      z-index: 5;
+    }
+    .preset-card:hover .preset-menu-btn { opacity: 1; }
+    @media (max-width: 768px) {
+      .preset-menu-btn { opacity: 1; }
+    }
+    .preset-menu-btn svg { width: 16px; height: 16px; }
+    .preset-menu {
+      position: absolute; top: -100%; right: 0;
+      background: var(--surface-2);
+      border: 1px solid var(--border-2);
+      border-radius: var(--r-md);
+      padding: 4px 0;
+      min-width: 100px;
+      box-shadow: var(--shadow-md);
+      z-index: 100;
+      display: none;
+    }
+    .preset-menu.show { display: block; }
+    .preset-menu-item {
+      padding: 8px 14px;
+      font-size: 12px; color: var(--text);
+      cursor: pointer;
+      transition: background .1s;
+    }
+    .preset-menu-item:hover { background: var(--surface-3); }
+    .preset-menu-item.delete { color: var(--red); }
+    .preset-menu-item.overwrite { color: var(--accent); }
+    .presets-empty {
+      text-align: center; padding: 32px 16px;
+      color: var(--text-3); font-size: 13px;
+    }
+
+    /* Preset editor modal */
+    .preset-editor-modal {
+      position: fixed; inset: 0;
+      background: var(--bg);
+      z-index: 270;
+      display: none; flex-direction: column;
+      animation: fade-in .2s var(--ease-out);
+    }
+    .preset-editor-modal.show { display: flex; }
+    .preset-editor-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+    }
+    .preset-editor-title {
+      font-size: 16px; font-weight: 600; color: var(--text);
+    }
+    .preset-editor-content {
+      flex: 1;
+      padding: 16px 20px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+    .preset-editor-textarea {
+      width: 100%;
+      flex: 1;
+      min-height: 0;
+      padding: 16px;
+      background: var(--surface-2);
+      border: 1px solid var(--border-2);
+      border-radius: var(--r-md);
+      color: var(--text);
+      font-size: 14px;
+      font-family: inherit;
+      resize: none;
+      outline: none;
+      transition: border-color .15s;
+    }
+    .preset-editor-textarea:focus {
+      border-color: var(--accent);
+    }
+    .preset-editor-footer {
+      display: flex; gap: 12px;
+      padding: 16px 20px;
+      border-top: 1px solid var(--border);
+      background: var(--surface);
+    }
+    .preset-editor-btn {
+      flex: 1;
+      padding: 12px 20px;
+      border: none;
+      border-radius: var(--r-md);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: transform .1s;
+    }
+    .preset-editor-btn:active { transform: scale(0.96); }
+    .preset-editor-btn.cancel {
+      background: var(--surface-2);
+      color: var(--text);
+      border: 1px solid var(--border-2);
+    }
+    .preset-editor-btn.save {
+      background: var(--accent);
+      color: var(--accent-text);
+    }
+    @media (max-width: 768px) {
+      .preset-editor-textarea {
+        min-height: 150px;
+        font-size: 16px;
+      }
     }
     .wf-browser-header {
       display: flex; justify-content: space-between; align-items: center;
@@ -1691,10 +1862,31 @@
       transition: fill .2s var(--ease-std);
     }
     .fav-star.active svg polygon { fill: currentColor; }
+    /* Preset button (next to star) */
+    .preset-btn {
+      background: none; border: none; padding: 0; margin: 0;
+      cursor: pointer; flex-shrink: 0;
+      display: inline-flex; align-items: center; justify-content: center;
+      color: var(--text-3); opacity: 0.6;
+      transition: color .2s var(--ease-std), opacity .2s var(--ease-std),
+                  transform .2s var(--ease-spring);
+      -webkit-tap-highlight-color: transparent;
+    }
+    .preset-btn:hover { color: var(--text-2); opacity: 1; transform: scale(1.18); }
+    .preset-btn:active { transform: scale(0.88); }
+    .preset-btn svg { width: 13px; height: 13px; display: block; pointer-events: none; }
+    .preset-btn svg polygon {
+      fill: none; stroke: currentColor; stroke-width: 1.6;
+      stroke-linejoin: round; stroke-linecap: round;
+    }
     /* Hosts that contain a star → become flex rows */
     label.has-fav-star,
-    .field-head.has-fav-star {
+    .field-head.has-fav-star,
+    .sec-label.has-fav-star {
       display: flex; align-items: center; justify-content: space-between;
+    }
+    .fav-btns-container {
+      display: flex; align-items: center; gap: 4px;
     }
 
     /* Form controls */
@@ -1759,8 +1951,12 @@
       width: 100%;
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: var(--r-sm); color: var(--text); font-size: 13px;
-      line-height: 1.55; padding: 9px 11px; outline: none; resize: vertical;
+      border-radius: var(--r-md);
+      padding: 10px 12px;
+      color: var(--text);
+      font-size: 13px;
+      line-height: 1.5;
+      resize: none;
       min-height: 70px;
       transition: border-color .12s, box-shadow .12s;
     }
@@ -1770,6 +1966,38 @@
     }
     #pos { min-height: 92px; }
     #neg { min-height: 56px; }
+
+    /* Textarea expand button */
+    .textarea-expand-btn {
+      position: absolute;
+      bottom: 8px;
+      right: 1px;
+      width: 24px;
+      height: 24px;
+      background: var(--surface-2);
+      border: 1px solid var(--border-2);
+      border-top-left-radius: 6px;
+      border-bottom-right-radius: var(--r-md);
+      border-top-right-radius: 0;
+      border-bottom-left-radius: 0;
+      color: var(--text-3);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 1;
+      transition: background .15s, color .15s, border-color .15s;
+      z-index: 5;
+    }
+    .textarea-expand-btn:hover {
+      background: var(--surface-3);
+      color: var(--text-2);
+      border-color: var(--border-3);
+    }
+    .textarea-expand-btn svg {
+      width: 14px;
+      height: 14px;
+    }
 
     .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     .field { display: flex; flex-direction: column; }
@@ -1985,7 +2213,8 @@
       position: absolute;
       left: 50%;
       top: 50%;
-      transform: translate(-50%, -50%);
+      margin-left: -8px;
+      margin-top: -8px;
     }
     .btn-loading .btn-text {
       opacity: 0;
@@ -2395,6 +2624,30 @@
     @keyframes vw-swipe-right {
       0%   { opacity: 0; transform: translateX(-40px); }
       100% { opacity: 1; transform: translateX(0); }
+    }
+
+    /* Seed overlay in viewer */
+    .seed-overlay {
+      position: absolute; top: 16px; right: 70px;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      color: var(--text);
+      font-family: ui-monospace, monospace;
+      cursor: pointer;
+      transition: background .15s;
+      z-index: 102;
+    }
+    .seed-overlay:hover { background: rgba(0,0,0,0.85); }
+    .seed-overlay:active { transform: scale(0.95); }
+    @media (max-width: 768px) {
+      .seed-overlay {
+        top: 12px; right: 12px;
+        font-size: 11px;
+        padding: 5px 10px;
+      }
     }
 
     header { position: relative; }
@@ -3455,12 +3708,28 @@
       <div class="sec">
         <div class="sec-label" data-fav-key="prompt">Prompt</div>
         <p class="easy-hint">Describe what you want to see. Be as detailed as you like — colors, style, mood, subject.</p>
-        <textarea id="pos" placeholder="Describe the image…" oninput="onPromptChange()"></textarea>
+        <div style="position: relative;">
+          <textarea id="pos" placeholder="Describe the image…" oninput="onPromptChange()"></textarea>
+          <button class="textarea-expand-btn" onclick="openTextEditor('pos')" title="Edit in fullscreen">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+          </button>
+        </div>
       </div>
 
       <div class="sec easy-hide">
         <div class="sec-label" data-fav-key="negative">Negative</div>
-        <textarea id="neg" placeholder="What to avoid (ignored at CFG 1)"></textarea>
+        <div style="position: relative;">
+          <textarea id="neg" placeholder="What to avoid (ignored at CFG 1)"></textarea>
+          <button class="textarea-expand-btn" onclick="openTextEditor('neg')" title="Edit in fullscreen">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+          </button>
+        </div>
       </div>
 
       <div class="sec easy-hide image-only">
@@ -3488,11 +3757,9 @@
             </div>
           </div>
           <div class="field" style="margin-top:10px">
-            <label class="field-head" data-fav-key="ref-mode">Mode</label>
-            <select id="ref-mode">
-              <option value="general">General — composition &amp; style</option>
-              <option value="face">Face — preserve face features</option>
-              <option value="faceid">FaceID — strongest face match</option>
+            <label class="field-head" data-fav-key="ref-model">IPAdapter Model</label>
+            <select id="ref-model">
+              <option value="">Loading…</option>
             </select>
           </div>
           <div class="slider-field" style="margin-top:10px">
@@ -3660,6 +3927,22 @@
             <line x1="12" y1="15" x2="12" y2="3"/>
           </svg>
           Install
+        </button>
+      </div>
+      <div class="vhs-warn-banner" id="ipadapter-warn" style="display:none">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="vhs-warn-icon">
+          <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+          <line x1="12" y1="9" x2="12" y2="13"/>
+          <line x1="12" y1="17" x2="12.01" y2="17"/>
+        </svg>
+        <span>Missing IPAdapter. Install via ComfyUI Manager: <strong>cubiq/ComfyUI_IPAdapter_plus</strong></span>
+        <button class="warn-download-btn" onclick="window.open('http://localhost:8188', '_blank')" title="Open ComfyUI">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+            <polyline points="15 3 21 3 21 9"/>
+            <line x1="10" y1="14" x2="21" y2="3"/>
+          </svg>
+          ComfyUI
         </button>
       </div>
       <div class="gen-row" id="gen-row">
@@ -3849,6 +4132,42 @@
   <button class="easy-pop-item" onclick="selectEasyQuality(35,'Quality')">Quality</button>
 </div>
 
+<!-- Presets modal -->
+<div class="presets-modal" id="presets-modal">
+  <div class="presets-card" onclick="event.stopPropagation()">
+    <div class="presets-header">
+      <div class="presets-title" id="presets-title">Prompt Presets</div>
+      <button class="presets-add-btn" onclick="addPreset()" title="Add preset">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg>
+      </button>
+    </div>
+    <div class="presets-list" id="presets-list"></div>
+  </div>
+</div>
+
+<!-- Preset editor modal -->
+<div class="preset-editor-modal" id="preset-editor-modal">
+  <div class="preset-editor-header">
+    <div class="preset-editor-title" id="text-editor-title">Edit value</div>
+    <button onclick="closeTextEditor()" style="background:none;border:none;color:var(--text-2);cursor:pointer;padding:8px;border-radius:6px;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+  </div>
+  <div class="preset-editor-content">
+    <textarea id="preset-editor-textarea" class="preset-editor-textarea" placeholder="Enter text..."></textarea>
+  </div>
+  <div class="preset-editor-footer">
+    <button class="preset-editor-btn cancel" onclick="closeTextEditor()">Cancel</button>
+    <button class="preset-editor-btn save" onclick="saveTextEdit()">Save</button>
+  </div>
+</div>
+
 <!-- Update available modal -->
 <div class="upd-modal" id="upd-modal">
   <div class="upd-card" onclick="event.stopPropagation()">
@@ -3888,6 +4207,21 @@
       <button class="upd-btn" onclick="dismissConnFail()">Close</button>
       <button class="upd-btn primary" onclick="startComfyUI()">Start ComfyUI</button>
     </div>
+  </div>
+</div>
+
+<!-- Presets modal -->
+<div class="presets-modal" id="presets-modal" onclick="closePresetsModal()">
+  <div class="presets-card" onclick="event.stopPropagation()">
+    <div class="presets-header">
+      <div class="presets-title" id="presets-title">Prompt Presets</div>
+      <button class="presets-add-btn" onclick="addPreset()" title="Add current as preset">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+        </svg>
+      </button>
+    </div>
+    <div class="presets-list" id="presets-list"></div>
   </div>
 </div>
 
@@ -3947,6 +4281,16 @@
       </div>
       <div class="settings-main">
         <div class="settings-section active" id="settings-general">
+          <div class="settings-field">
+            <div class="settings-toggle">
+              <input type="checkbox" id="show-seed-overlay" checked>
+              <label class="toggle-label" for="show-seed-overlay"></label>
+              <div>
+                <div class="settings-label">Show seed overlay inside Image Viewer</div>
+                <div class="toggle-description">Display seed value on images and videos in the viewer</div>
+              </div>
+            </div>
+          </div>
           <div class="settings-field">
             <label class="settings-label">ComfyUI Path</label>
             <div class="settings-path-row">
@@ -4080,6 +4424,7 @@
   </button>
   <img id="viewer-img" alt="" onclick="event.stopPropagation()">
   <video id="viewer-video" autoplay loop muted playsinline controls onclick="event.stopPropagation()" style="display:none"></video>
+  <div class="seed-overlay" id="seed-overlay" style="display:none" onclick="copySeedToClipboard()"></div>
 </div>
 
 <div class="mob-backdrop" id="mob-backdrop" onclick="closeMobPanels()"></div>
@@ -4952,6 +5297,25 @@ async function loadModels() {
     
     fill('vae-sel',   info?.VAELoader?.input?.required?.vae_name?.[0] || [], 'No VAE models');
     fill('upscaler-sel', info?.ImageUpscaleWithModel?.input?.required?.model_name?.[0] || [], 'No upscaler models');
+    
+    // Try multiple IPAdapter node types to find available models
+    const ipadapterModels = [
+      ...(info?.IPAdapterUnifiedLoader?.input?.required?.ipadapter_file?.[0] || []),
+      ...(info?.IPAdapterLoader?.input?.required?.ipadapter_file?.[0] || []),
+      ...(info?.IPAdapterModelLoader?.input?.required?.ipadapter_file?.[0] || []),
+      ...(info?.IPAdapterAdvanced?.input?.required?.ipadapter_file?.[0] || [])
+    ];
+    const uniqueIpadapterModels = [...new Set(ipadapterModels)];
+    fill('ref-model', uniqueIpadapterModels, 'No IPAdapter models');
+    
+    // Track which IPAdapter nodes are available
+    state.hasIPAdapterNodes = !!(
+      info?.IPAdapterUnifiedLoader || 
+      info?.IPAdapterLoader || 
+      info?.IPAdapterModelLoader || 
+      info?.IPAdapterAdvanced
+    );
+    
     const loras = info?.LoraLoader?.input?.required?.lora_name?.[0] || [];
     for (const sid of ['lora1-sel', 'lora2-sel', 'easy-lora-sel']) {
       const sel = $(sid); sel.innerHTML = '<option value="">None</option>';
@@ -5027,6 +5391,8 @@ async function checkComfyUIHealth() {
       if (wasOffline || wasStarting) {
         wasOffline = false;
         await loadModels();
+        // Restore favorite values after health check reloads models
+        applyFavValues();
       }
     } else {
       wasOffline = true;
@@ -5198,32 +5564,24 @@ function sdxlFaceDetailerWorkflow(seed) {
   let activeModel = modelRef;
   const extra = {};
   if (ref) {
-    const mode = (v('ref-mode') || 'general');
+    const ipadapterModel = v('ref-model');
     const weight = getRefDenoise();
-    extra["ip_load"]    = { class_type: "LoadImage", inputs: { image: ref.name } };
-
-    if (mode === 'faceid') {
-      extra["ip_unified"] = { class_type: "IPAdapterUnifiedLoaderFaceID", inputs: {
-        model: activeModel, preset: "FACEID PLUS V2", lora_strength: 0.8, provider: "CPU"
-      }};
-      extra["ip_apply"]   = { class_type: "IPAdapterFaceID", inputs: {
-        model: ["ip_unified", 0], ipadapter: ["ip_unified", 1],
-        image: ["ip_load", 0],
-        weight, weight_faceidv2: weight * 3,
-        weight_type: "linear", combine_embeds: "concat",
-        start_at: 0.0, end_at: 1.0, embeds_scaling: "V only"
-      }};
+    if (!ipadapterModel) {
+      // No IPAdapter model selected, skip reference image
     } else {
-      const preset = (mode === 'face') ? "PLUS FACE (portraits)" : "PLUS (high strength)";
-      extra["ip_unified"] = { class_type: "IPAdapterUnifiedLoader", inputs: { model: activeModel, preset } };
+      extra["ip_load"]    = { class_type: "LoadImage", inputs: { image: ref.name } };
+      extra["ip_unified"] = { class_type: "IPAdapterUnifiedLoader", inputs: { 
+        model: activeModel, 
+        ipadapter_file: ipadapterModel 
+      }};
       extra["ip_apply"]   = { class_type: "IPAdapter", inputs: {
         model: ["ip_unified", 0], ipadapter: ["ip_unified", 1],
         image: ["ip_load", 0],
         weight, weight_type: "standard",
         start_at: 0.0, end_at: 1.0
       }};
+      activeModel = ["ip_apply", 0];
     }
-    activeModel = ["ip_apply", 0];
   }
 
   // Handle custom VAE
@@ -5283,31 +5641,24 @@ function fluxGgufFaceDetailerWorkflow(seed) {
   let activeModel = modelRef;
   const extra = {};
   if (ref) {
-    const mode = (v('ref-mode') || 'general');
+    const ipadapterModel = v('ref-model');
     const weight = getRefDenoise();
-    extra["ip_load"]    = { class_type: "LoadImage", inputs: { image: ref.name } };
-    if (mode === 'faceid') {
-      extra["ip_unified"] = { class_type: "IPAdapterUnifiedLoaderFaceID", inputs: {
-        model: activeModel, preset: "FACEID PLUS V2", lora_strength: 0.8, provider: "CPU"
-      }};
-      extra["ip_apply"]   = { class_type: "IPAdapterFaceID", inputs: {
-        model: ["ip_unified", 0], ipadapter: ["ip_unified", 1],
-        image: ["ip_load", 0],
-        weight, weight_faceidv2: weight * 3,
-        weight_type: "linear", combine_embeds: "concat",
-        start_at: 0.0, end_at: 1.0, embeds_scaling: "V only"
-      }};
+    if (!ipadapterModel) {
+      // No IPAdapter model selected, skip reference image
     } else {
-      const preset = (mode === 'face') ? "PLUS FACE (portraits)" : "PLUS (high strength)";
-      extra["ip_unified"] = { class_type: "IPAdapterUnifiedLoader", inputs: { model: activeModel, preset } };
+      extra["ip_load"]    = { class_type: "LoadImage", inputs: { image: ref.name } };
+      extra["ip_unified"] = { class_type: "IPAdapterUnifiedLoader", inputs: { 
+        model: activeModel, 
+        ipadapter_file: ipadapterModel 
+      }};
       extra["ip_apply"]   = { class_type: "IPAdapter", inputs: {
         model: ["ip_unified", 0], ipadapter: ["ip_unified", 1],
         image: ["ip_load", 0],
         weight, weight_type: "standard",
         start_at: 0.0, end_at: 1.0
       }};
+      activeModel = ["ip_apply", 0];
     }
-    activeModel = ["ip_apply", 0];
   }
 
   const faceDenoise = n('face-denoise') || 0.5;
@@ -5360,31 +5711,24 @@ function fluxFaceDetailerWorkflow(seed) {
   let activeModel = modelRef;
   const extra = {};
   if (ref) {
-    const mode = (v('ref-mode') || 'general');
+    const ipadapterModel = v('ref-model');
     const weight = getRefDenoise();
-    extra["ip_load"]    = { class_type: "LoadImage", inputs: { image: ref.name } };
-    if (mode === 'faceid') {
-      extra["ip_unified"] = { class_type: "IPAdapterUnifiedLoaderFaceID", inputs: {
-        model: activeModel, preset: "FACEID PLUS V2", lora_strength: 0.8, provider: "CPU"
-      }};
-      extra["ip_apply"]   = { class_type: "IPAdapterFaceID", inputs: {
-        model: ["ip_unified", 0], ipadapter: ["ip_unified", 1],
-        image: ["ip_load", 0],
-        weight, weight_faceidv2: weight * 3,
-        weight_type: "linear", combine_embeds: "concat",
-        start_at: 0.0, end_at: 1.0, embeds_scaling: "V only"
-      }};
+    if (!ipadapterModel) {
+      // No IPAdapter model selected, skip reference image
     } else {
-      const preset = (mode === 'face') ? "PLUS FACE (portraits)" : "PLUS (high strength)";
-      extra["ip_unified"] = { class_type: "IPAdapterUnifiedLoader", inputs: { model: activeModel, preset } };
+      extra["ip_load"]    = { class_type: "LoadImage", inputs: { image: ref.name } };
+      extra["ip_unified"] = { class_type: "IPAdapterUnifiedLoader", inputs: { 
+        model: activeModel, 
+        ipadapter_file: ipadapterModel 
+      }};
       extra["ip_apply"]   = { class_type: "IPAdapter", inputs: {
         model: ["ip_unified", 0], ipadapter: ["ip_unified", 1],
         image: ["ip_load", 0],
         weight, weight_type: "standard",
         start_at: 0.0, end_at: 1.0
       }};
+      activeModel = ["ip_apply", 0];
     }
-    activeModel = ["ip_apply", 0];
   }
 
   const faceDenoise = n('face-denoise') || 0.5;
@@ -5441,32 +5785,24 @@ function faceDetailerWorkflow(seed) {
   let activeModel = modelRef;
   const extra = {};
   if (ref) {
-    const mode = (v('ref-mode') || 'general');
+    const ipadapterModel = v('ref-model');
     const weight = getRefDenoise();
-    extra["ip_load"]    = { class_type: "LoadImage", inputs: { image: ref.name } };
-
-    if (mode === 'faceid') {
-      extra["ip_unified"] = { class_type: "IPAdapterUnifiedLoaderFaceID", inputs: {
-        model: activeModel, preset: "FACEID PLUS V2", lora_strength: 0.8, provider: "CPU"
-      }};
-      extra["ip_apply"]   = { class_type: "IPAdapterFaceID", inputs: {
-        model: ["ip_unified", 0], ipadapter: ["ip_unified", 1],
-        image: ["ip_load", 0],
-        weight, weight_faceidv2: weight * 3,
-        weight_type: "linear", combine_embeds: "concat",
-        start_at: 0.0, end_at: 1.0, embeds_scaling: "V only"
-      }};
+    if (!ipadapterModel) {
+      // No IPAdapter model selected, skip reference image
     } else {
-      const preset = (mode === 'face') ? "PLUS FACE (portraits)" : "PLUS (high strength)";
-      extra["ip_unified"] = { class_type: "IPAdapterUnifiedLoader", inputs: { model: activeModel, preset } };
+      extra["ip_load"]    = { class_type: "LoadImage", inputs: { image: ref.name } };
+      extra["ip_unified"] = { class_type: "IPAdapterUnifiedLoader", inputs: { 
+        model: activeModel, 
+        ipadapter_file: ipadapterModel 
+      }};
       extra["ip_apply"]   = { class_type: "IPAdapter", inputs: {
         model: ["ip_unified", 0], ipadapter: ["ip_unified", 1],
         image: ["ip_load", 0],
         weight, weight_type: "standard",
         start_at: 0.0, end_at: 1.0
       }};
+      activeModel = ["ip_apply", 0];
     }
-    activeModel = ["ip_apply", 0];
   }
 
   // Handle custom VAE
@@ -5503,32 +5839,24 @@ function sdxlHiresFixWorkflow(seed) {
   let activeModel = modelRef;
   const extra = {};
   if (ref) {
-    const mode = (v('ref-mode') || 'general');
+    const ipadapterModel = v('ref-model');
     const weight = getRefDenoise();
-    extra["ip_load"]    = { class_type: "LoadImage", inputs: { image: ref.name } };
-
-    if (mode === 'faceid') {
-      extra["ip_unified"] = { class_type: "IPAdapterUnifiedLoaderFaceID", inputs: {
-        model: activeModel, preset: "FACEID PLUS V2", lora_strength: 0.8, provider: "CPU"
-      }};
-      extra["ip_apply"]   = { class_type: "IPAdapterFaceID", inputs: {
-        model: ["ip_unified", 0], ipadapter: ["ip_unified", 1],
-        image: ["ip_load", 0],
-        weight, weight_faceidv2: weight * 3,
-        weight_type: "linear", combine_embeds: "concat",
-        start_at: 0.0, end_at: 1.0, embeds_scaling: "V only"
-      }};
+    if (!ipadapterModel) {
+      // No IPAdapter model selected, skip reference image
     } else {
-      const preset = (mode === 'face') ? "PLUS FACE (portraits)" : "PLUS (high strength)";
-      extra["ip_unified"] = { class_type: "IPAdapterUnifiedLoader", inputs: { model: activeModel, preset } };
+      extra["ip_load"]    = { class_type: "LoadImage", inputs: { image: ref.name } };
+      extra["ip_unified"] = { class_type: "IPAdapterUnifiedLoader", inputs: { 
+        model: activeModel, 
+        ipadapter_file: ipadapterModel 
+      }};
       extra["ip_apply"]   = { class_type: "IPAdapter", inputs: {
         model: ["ip_unified", 0], ipadapter: ["ip_unified", 1],
         image: ["ip_load", 0],
         weight, weight_type: "standard",
         start_at: 0.0, end_at: 1.0
       }};
+      activeModel = ["ip_apply", 0];
     }
-    activeModel = ["ip_apply", 0];
   }
 
   // HiRes Fix: two-pass generation with upscaler
@@ -5576,31 +5904,24 @@ function fluxGgufHiresFixWorkflow(seed) {
   let activeModel = modelRef;
   const extra = {};
   if (ref) {
-    const mode = (v('ref-mode') || 'general');
+    const ipadapterModel = v('ref-model');
     const weight = getRefDenoise();
-    extra["ip_load"]    = { class_type: "LoadImage", inputs: { image: ref.name } };
-    if (mode === 'faceid') {
-      extra["ip_unified"] = { class_type: "IPAdapterUnifiedLoaderFaceID", inputs: {
-        model: activeModel, preset: "FACEID PLUS V2", lora_strength: 0.8, provider: "CPU"
-      }};
-      extra["ip_apply"]   = { class_type: "IPAdapterFaceID", inputs: {
-        model: ["ip_unified", 0], ipadapter: ["ip_unified", 1],
-        image: ["ip_load", 0],
-        weight, weight_faceidv2: weight * 3,
-        weight_type: "linear", combine_embeds: "concat",
-        start_at: 0.0, end_at: 1.0, embeds_scaling: "V only"
-      }};
+    if (!ipadapterModel) {
+      // No IPAdapter model selected, skip reference image
     } else {
-      const preset = (mode === 'face') ? "PLUS FACE (portraits)" : "PLUS (high strength)";
-      extra["ip_unified"] = { class_type: "IPAdapterUnifiedLoader", inputs: { model: activeModel, preset } };
+      extra["ip_load"]    = { class_type: "LoadImage", inputs: { image: ref.name } };
+      extra["ip_unified"] = { class_type: "IPAdapterUnifiedLoader", inputs: { 
+        model: activeModel, 
+        ipadapter_file: ipadapterModel 
+      }};
       extra["ip_apply"]   = { class_type: "IPAdapter", inputs: {
         model: ["ip_unified", 0], ipadapter: ["ip_unified", 1],
         image: ["ip_load", 0],
         weight, weight_type: "standard",
         start_at: 0.0, end_at: 1.0
       }};
+      activeModel = ["ip_apply", 0];
     }
-    activeModel = ["ip_apply", 0];
   }
 
   // HiRes Fix: two-pass generation with upscaler
@@ -5645,31 +5966,24 @@ function fluxHiresFixWorkflow(seed) {
   let activeModel = modelRef;
   const extra = {};
   if (ref) {
-    const mode = (v('ref-mode') || 'general');
+    const ipadapterModel = v('ref-model');
     const weight = getRefDenoise();
-    extra["ip_load"]    = { class_type: "LoadImage", inputs: { image: ref.name } };
-    if (mode === 'faceid') {
-      extra["ip_unified"] = { class_type: "IPAdapterUnifiedLoaderFaceID", inputs: {
-        model: activeModel, preset: "FACEID PLUS V2", lora_strength: 0.8, provider: "CPU"
-      }};
-      extra["ip_apply"]   = { class_type: "IPAdapterFaceID", inputs: {
-        model: ["ip_unified", 0], ipadapter: ["ip_unified", 1],
-        image: ["ip_load", 0],
-        weight, weight_faceidv2: weight * 3,
-        weight_type: "linear", combine_embeds: "concat",
-        start_at: 0.0, end_at: 1.0, embeds_scaling: "V only"
-      }};
+    if (!ipadapterModel) {
+      // No IPAdapter model selected, skip reference image
     } else {
-      const preset = (mode === 'face') ? "PLUS FACE (portraits)" : "PLUS (high strength)";
-      extra["ip_unified"] = { class_type: "IPAdapterUnifiedLoader", inputs: { model: activeModel, preset } };
+      extra["ip_load"]    = { class_type: "LoadImage", inputs: { image: ref.name } };
+      extra["ip_unified"] = { class_type: "IPAdapterUnifiedLoader", inputs: { 
+        model: activeModel, 
+        ipadapter_file: ipadapterModel 
+      }};
       extra["ip_apply"]   = { class_type: "IPAdapter", inputs: {
         model: ["ip_unified", 0], ipadapter: ["ip_unified", 1],
         image: ["ip_load", 0],
         weight, weight_type: "standard",
         start_at: 0.0, end_at: 1.0
       }};
+      activeModel = ["ip_apply", 0];
     }
-    activeModel = ["ip_apply", 0];
   }
 
   // HiRes Fix: two-pass generation with upscaler
@@ -5718,32 +6032,24 @@ function hiresfixWorkflow(seed) {
   let activeModel = modelRef;
   const extra = {};
   if (ref) {
-    const mode = (v('ref-mode') || 'general');
+    const ipadapterModel = v('ref-model');
     const weight = getRefDenoise();
-    extra["ip_load"]    = { class_type: "LoadImage", inputs: { image: ref.name } };
-
-    if (mode === 'faceid') {
-      extra["ip_unified"] = { class_type: "IPAdapterUnifiedLoaderFaceID", inputs: {
-        model: activeModel, preset: "FACEID PLUS V2", lora_strength: 0.8, provider: "CPU"
-      }};
-      extra["ip_apply"]   = { class_type: "IPAdapterFaceID", inputs: {
-        model: ["ip_unified", 0], ipadapter: ["ip_unified", 1],
-        image: ["ip_load", 0],
-        weight, weight_faceidv2: weight * 3,
-        weight_type: "linear", combine_embeds: "concat",
-        start_at: 0.0, end_at: 1.0, embeds_scaling: "V only"
-      }};
+    if (!ipadapterModel) {
+      // No IPAdapter model selected, skip reference image
     } else {
-      const preset = (mode === 'face') ? "PLUS FACE (portraits)" : "PLUS (high strength)";
-      extra["ip_unified"] = { class_type: "IPAdapterUnifiedLoader", inputs: { model: activeModel, preset } };
+      extra["ip_load"]    = { class_type: "LoadImage", inputs: { image: ref.name } };
+      extra["ip_unified"] = { class_type: "IPAdapterUnifiedLoader", inputs: { 
+        model: activeModel, 
+        ipadapter_file: ipadapterModel 
+      }};
       extra["ip_apply"]   = { class_type: "IPAdapter", inputs: {
         model: ["ip_unified", 0], ipadapter: ["ip_unified", 1],
         image: ["ip_load", 0],
         weight, weight_type: "standard",
         start_at: 0.0, end_at: 1.0
       }};
+      activeModel = ["ip_apply", 0];
     }
-    activeModel = ["ip_apply", 0];
   }
 
   // HiRes Fix: two-pass generation
@@ -5791,32 +6097,24 @@ function sdxlWorkflow(seed) {
   let activeModel = modelRef;
   const extra = {};
   if (ref) {
-    const mode = (v('ref-mode') || 'general');
+    const ipadapterModel = v('ref-model');
     const weight = getRefDenoise();
-    extra["ip_load"]    = { class_type: "LoadImage", inputs: { image: ref.name } };
-
-    if (mode === 'faceid') {
-      extra["ip_unified"] = { class_type: "IPAdapterUnifiedLoaderFaceID", inputs: {
-        model: activeModel, preset: "FACEID PLUS V2", lora_strength: 0.8, provider: "CPU"
-      }};
-      extra["ip_apply"]   = { class_type: "IPAdapterFaceID", inputs: {
-        model: ["ip_unified", 0], ipadapter: ["ip_unified", 1],
-        image: ["ip_load", 0],
-        weight, weight_faceidv2: weight * 3,
-        weight_type: "linear", combine_embeds: "concat",
-        start_at: 0.0, end_at: 1.0, embeds_scaling: "V only"
-      }};
+    if (!ipadapterModel) {
+      // No IPAdapter model selected, skip reference image
     } else {
-      const preset = (mode === 'face') ? "PLUS FACE (portraits)" : "PLUS (high strength)";
-      extra["ip_unified"] = { class_type: "IPAdapterUnifiedLoader", inputs: { model: activeModel, preset } };
+      extra["ip_load"]    = { class_type: "LoadImage", inputs: { image: ref.name } };
+      extra["ip_unified"] = { class_type: "IPAdapterUnifiedLoader", inputs: { 
+        model: activeModel, 
+        ipadapter_file: ipadapterModel 
+      }};
       extra["ip_apply"]   = { class_type: "IPAdapter", inputs: {
         model: ["ip_unified", 0], ipadapter: ["ip_unified", 1],
         image: ["ip_load", 0],
         weight, weight_type: "standard",
         start_at: 0.0, end_at: 1.0
       }};
+      activeModel = ["ip_apply", 0];
     }
-    activeModel = ["ip_apply", 0];
   }
 
   // Handle custom VAE
@@ -5872,31 +6170,24 @@ function fluxStandardWorkflow(seed) {
   let activeModel = modelRef;
   const extra = {};
   if (ref) {
-    const mode = (v('ref-mode') || 'general');
+    const ipadapterModel = v('ref-model');
     const weight = getRefDenoise();
-    extra["ip_load"]    = { class_type: "LoadImage", inputs: { image: ref.name } };
-    if (mode === 'faceid') {
-      extra["ip_unified"] = { class_type: "IPAdapterUnifiedLoaderFaceID", inputs: {
-        model: activeModel, preset: "FACEID PLUS V2", lora_strength: 0.8, provider: "CPU"
-      }};
-      extra["ip_apply"]   = { class_type: "IPAdapterFaceID", inputs: {
-        model: ["ip_unified", 0], ipadapter: ["ip_unified", 1],
-        image: ["ip_load", 0],
-        weight, weight_faceidv2: weight * 3,
-        weight_type: "linear", combine_embeds: "concat",
-        start_at: 0.0, end_at: 1.0, embeds_scaling: "V only"
-      }};
+    if (!ipadapterModel) {
+      // No IPAdapter model selected, skip reference image
     } else {
-      const preset = (mode === 'face') ? "PLUS FACE (portraits)" : "PLUS (high strength)";
-      extra["ip_unified"] = { class_type: "IPAdapterUnifiedLoader", inputs: { model: activeModel, preset } };
+      extra["ip_load"]    = { class_type: "LoadImage", inputs: { image: ref.name } };
+      extra["ip_unified"] = { class_type: "IPAdapterUnifiedLoader", inputs: { 
+        model: activeModel, 
+        ipadapter_file: ipadapterModel 
+      }};
       extra["ip_apply"]   = { class_type: "IPAdapter", inputs: {
         model: ["ip_unified", 0], ipadapter: ["ip_unified", 1],
         image: ["ip_load", 0],
         weight, weight_type: "standard",
         start_at: 0.0, end_at: 1.0
       }};
+      activeModel = ["ip_apply", 0];
     }
-    activeModel = ["ip_apply", 0];
   }
   return {
     "1": { class_type: "UNETLoader", inputs: { unet_name: v('unet-sel') } },
@@ -5929,32 +6220,24 @@ function fluxWorkflow(seed) {
   let activeModel = modelRef;
   const extra = {};
   if (ref) {
-    const mode = (v('ref-mode') || 'general');
+    const ipadapterModel = v('ref-model');
     const weight = getRefDenoise();
-    extra["ip_load"]    = { class_type: "LoadImage", inputs: { image: ref.name } };
-
-    if (mode === 'faceid') {
-      extra["ip_unified"] = { class_type: "IPAdapterUnifiedLoaderFaceID", inputs: {
-        model: activeModel, preset: "FACEID PLUS V2", lora_strength: 0.8, provider: "CPU"
-      }};
-      extra["ip_apply"]   = { class_type: "IPAdapterFaceID", inputs: {
-        model: ["ip_unified", 0], ipadapter: ["ip_unified", 1],
-        image: ["ip_load", 0],
-        weight, weight_faceidv2: weight * 3,
-        weight_type: "linear", combine_embeds: "concat",
-        start_at: 0.0, end_at: 1.0, embeds_scaling: "V only"
-      }};
+    if (!ipadapterModel) {
+      // No IPAdapter model selected, skip reference image
     } else {
-      const preset = (mode === 'face') ? "PLUS FACE (portraits)" : "PLUS (high strength)";
-      extra["ip_unified"] = { class_type: "IPAdapterUnifiedLoader", inputs: { model: activeModel, preset } };
+      extra["ip_load"]    = { class_type: "LoadImage", inputs: { image: ref.name } };
+      extra["ip_unified"] = { class_type: "IPAdapterUnifiedLoader", inputs: { 
+        model: activeModel, 
+        ipadapter_file: ipadapterModel 
+      }};
       extra["ip_apply"]   = { class_type: "IPAdapter", inputs: {
         model: ["ip_unified", 0], ipadapter: ["ip_unified", 1],
         image: ["ip_load", 0],
         weight, weight_type: "standard",
         start_at: 0.0, end_at: 1.0
       }};
+      activeModel = ["ip_apply", 0];
     }
-    activeModel = ["ip_apply", 0];
   }
   return {
     "1": { class_type: "UnetLoaderGGUF", inputs: { unet_name: v('unet-sel') } },
@@ -6342,6 +6625,14 @@ function toggleRefImg() {
   state.refEnabled = !state.refEnabled;
   $('ref-tog').classList.toggle('on', state.refEnabled);
   $('ref-img-zone').classList.toggle('open', state.refEnabled);
+  
+  // Check for IPAdapter nodes when enabling
+  if (state.refEnabled && !state.hasIPAdapterNodes) {
+    $('ipadapter-warn').style.display = 'flex';
+  } else {
+    $('ipadapter-warn').style.display = 'none';
+  }
+  
   try { localStorage.setItem('ref-enabled', state.refEnabled ? '1' : '0'); } catch {}
   if (!state.refEnabled) clearRefImage(false);
 }
@@ -6865,6 +7156,7 @@ function openViewerUrl(url) {
   $('viewer').classList.add('show');
   state.viewerIdx = state.history.findIndex(it => it.url === url);
   updateViewerNavButtons();
+  updateSeedOverlay(url);
 }
 function openViewerAt(idx) {
   if (idx < 0 || idx >= state.history.length) return;
@@ -6888,10 +7180,12 @@ function openViewerAt(idx) {
   }
   $('viewer').classList.add('show');
   updateViewerNavButtons();
+  updateSeedOverlay(url);
 }
 function closeViewer() {
   $('viewer').classList.remove('show');
   $('viewer-video').pause();
+  $('seed-overlay').style.display = 'none';
 }
 function updateViewerNavButtons() {
   const prev = $('viewer-prev'), next = $('viewer-next');
@@ -6899,6 +7193,244 @@ function updateViewerNavButtons() {
   const has = state.viewerIdx != null && state.viewerIdx >= 0;
   prev.disabled = !has || state.viewerIdx <= 0;
   next.disabled = !has || state.viewerIdx >= state.history.length - 1;
+}
+function updateSeedOverlay(url) {
+  const overlay = $('seed-overlay');
+  if (!overlay) return;
+  
+  // Check if overlay is enabled in settings
+  const showOverlay = $('show-seed-overlay')?.checked ?? true;
+  if (!showOverlay) {
+    overlay.style.display = 'none';
+    return;
+  }
+  
+  // Try to find in history first
+  let item = state.history.find(it => it.url === url);
+  let filename = item?.filename;
+  
+  // If not in history, try state.current
+  if (!filename && state.current?.url === url) {
+    filename = state.current.filename;
+  }
+  
+  if (filename) {
+    const meta = state.meta.get(filename);
+    if (meta && meta.seed != null) {
+      overlay.textContent = 'Seed: ' + meta.seed;
+      overlay.style.display = 'block';
+      return;
+    }
+  }
+  overlay.style.display = 'none';
+}
+function copySeedToClipboard() {
+  const overlay = $('seed-overlay');
+  const seedText = overlay.textContent.replace('Seed: ', '');
+  navigator.clipboard.writeText(seedText).then(() => {
+    showToast('Seed copied to clipboard');
+  }).catch(() => {
+    showToast('Failed to copy seed');
+  });
+}
+
+let currentPresetType = 'prompt';
+let editingPresetIdx = null;
+let textEditorTarget = null; // 'pos', 'neg', or preset index
+
+function openPresetsModal(type) {
+  currentPresetType = type;
+  $('presets-title').textContent = type === 'prompt' ? 'Prompt Presets' : 'Negative Presets';
+  $('presets-modal').classList.add('show');
+  renderPresets();
+}
+
+function closePresetsModal() {
+  $('presets-modal').classList.remove('show');
+  document.querySelectorAll('.preset-menu').forEach(m => m.classList.remove('show'));
+}
+
+function openTextEditor(target) {
+  textEditorTarget = target;
+  if (target === 'pos' || target === 'neg') {
+    $('text-editor-title').textContent = 'Edit value';
+    $('preset-editor-textarea').value = $(target).value;
+  } else {
+    // It's a preset index
+    $('text-editor-title').textContent = 'Edit preset';
+  }
+  $('preset-editor-modal').classList.add('show');
+}
+
+function closeTextEditor() {
+  $('preset-editor-modal').classList.remove('show');
+  textEditorTarget = null;
+  editingPresetIdx = null;
+}
+
+function saveTextEdit() {
+  const newText = $('preset-editor-textarea').value.trim();
+  if (!newText) {
+    showToast('Cannot save empty text');
+    return;
+  }
+  
+  if (textEditorTarget === 'pos' || textEditorTarget === 'neg') {
+    $(textEditorTarget).value = newText;
+    if (textEditorTarget === 'pos') onPromptChange();
+    showToast('Saved');
+  } else if (editingPresetIdx !== null) {
+    const presets = getPresets();
+    presets[editingPresetIdx].text = newText;
+    savePresets(presets);
+    renderPresets();
+    showToast('Preset saved');
+  }
+  closeTextEditor();
+}
+
+function getPresetsKey() {
+  return 'somni_presets_' + currentPresetType;
+}
+
+function getPresets() {
+  try {
+    const stored = localStorage.getItem(getPresetsKey());
+    return stored ? JSON.parse(stored) : [];
+  } catch {
+    return [];
+  }
+}
+
+function savePresets(presets) {
+  try {
+    localStorage.setItem(getPresetsKey(), JSON.stringify(presets));
+  } catch {}
+}
+
+function renderPresets() {
+  const list = $('presets-list');
+  const presets = getPresets();
+  list.innerHTML = '';
+  
+  if (presets.length === 0) {
+    list.innerHTML = '<div class="presets-empty">No presets yet. Click + to add one.</div>';
+    return;
+  }
+  
+  presets.forEach((preset, idx) => {
+    const card = document.createElement('div');
+    card.className = 'preset-card';
+    card.innerHTML = `
+      <div class="preset-text">${escapeHtml(preset.text)}</div>
+      <button class="preset-menu-btn" onclick="event.stopPropagation();togglePresetMenu(${idx}, this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/>
+        </svg>
+      </button>
+      <div class="preset-menu" id="preset-menu-${idx}">
+        <div class="preset-menu-item overwrite" onclick="overwritePreset(${idx})">Overwrite</div>
+        <div class="preset-menu-item" onclick="editPreset(${idx})">Edit</div>
+        <div class="preset-menu-item delete" onclick="deletePreset(${idx})">Delete</div>
+      </div>
+    `;
+    card.onclick = () => applyPreset(preset.text);
+    list.appendChild(card);
+  });
+}
+
+function addPreset() {
+  const textareaId = currentPresetType === 'prompt' ? 'pos' : 'neg';
+  const text = v(textareaId).trim();
+  if (!text) {
+    showToast('Cannot add empty preset');
+    return;
+  }
+  
+  const presets = getPresets();
+  presets.push({ text, id: Date.now() });
+  savePresets(presets);
+  renderPresets();
+  showToast('Preset added');
+}
+
+function applyPreset(text) {
+  const textareaId = currentPresetType === 'prompt' ? 'pos' : 'neg';
+  $(textareaId).value = text;
+  closePresetsModal();
+  onPromptChange();
+}
+
+function togglePresetMenu(idx, btn) {
+  const menu = $(`preset-menu-${idx}`);
+  document.querySelectorAll('.preset-menu').forEach(m => {
+    if (m !== menu) m.classList.remove('show');
+  });
+  menu.classList.toggle('show');
+}
+
+function overwritePreset(idx) {
+  const textareaId = currentPresetType === 'prompt' ? 'pos' : 'neg';
+  const text = v(textareaId).trim();
+  if (!text) {
+    showToast('Cannot overwrite with empty text');
+    return;
+  }
+  
+  const presets = getPresets();
+  presets[idx].text = text;
+  savePresets(presets);
+  renderPresets();
+  document.querySelectorAll('.preset-menu').forEach(m => m.classList.remove('show'));
+  showToast('Preset overwritten');
+}
+
+function editPreset(idx) {
+  const presets = getPresets();
+  const preset = presets[idx];
+  editingPresetIdx = idx;
+  textEditorTarget = idx; // Use idx as target for presets
+  $('text-editor-title').textContent = 'Edit preset';
+  $('preset-editor-textarea').value = preset.text;
+  $('preset-editor-modal').classList.add('show');
+  document.querySelectorAll('.preset-menu').forEach(m => m.classList.remove('show'));
+}
+
+function closePresetEditor() {
+  $('preset-editor-modal').classList.remove('show');
+  editingPresetIdx = null;
+}
+
+function savePresetEdit() {
+  const newText = $('preset-editor-textarea').value.trim();
+  if (!newText) {
+    showToast('Cannot save empty preset');
+    return;
+  }
+  
+  if (editingPresetIdx !== null) {
+    const presets = getPresets();
+    presets[editingPresetIdx].text = newText;
+    savePresets(presets);
+    renderPresets();
+    showToast('Preset saved');
+  }
+  closePresetEditor();
+}
+
+function deletePreset(idx) {
+  const presets = getPresets();
+  presets.splice(idx, 1);
+  savePresets(presets);
+  renderPresets();
+  document.querySelectorAll('.preset-menu').forEach(m => m.classList.remove('show'));
+  showToast('Preset deleted');
+}
+
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
 }
 function viewerStep(delta) {
   if (state.viewerIdx == null || state.viewerIdx < 0) return;
@@ -6923,10 +7455,8 @@ function viewerStep(delta) {
     img.src = url;
     img.style.display = 'block';
   }
-  mediaEl.classList.remove('swipe-left', 'swipe-right');
-  void mediaEl.offsetWidth;
-  mediaEl.classList.add(delta > 0 ? 'swipe-left' : 'swipe-right');
   updateViewerNavButtons();
+  updateSeedOverlay(url);
 }
 
 // Touch swipe (mobile)
@@ -6986,6 +7516,8 @@ document.addEventListener('keydown', e => {
     else if (e.key === 'ArrowRight') { e.preventDefault(); viewerStep(1); }
   } else if ($('wf-browser-modal').classList.contains('show')) {
     if (e.key === 'Escape') closeWorkflowBrowser();
+  } else if ($('presets-modal').classList.contains('show')) {
+    if (e.key === 'Escape') closePresetsModal();
   }
 });
 
@@ -6996,6 +7528,7 @@ const FAV_HANDLERS = {
   'clip1':      { read: () => $('clip1-sel').value, write: v => { $('clip1-sel').value = v; }, el: 'clip1-sel' },
   'clip2':      { read: () => $('clip2-sel').value, write: v => { $('clip2-sel').value = v; }, el: 'clip2-sel' },
   'vae':        { read: () => $('vae-sel').value,   write: v => { $('vae-sel').value   = v; }, el: 'vae-sel'   },
+  'upscaler':   { read: () => $('upscaler-sel').value, write: v => { $('upscaler-sel').value = v; }, el: 'upscaler-sel' },
   'lora1':      { read: () => $('lora1-sel').value, write: v => { $('lora1-sel').value = v; onLoraChange(); }, el: 'lora1-sel' },
   'lora2':      { read: () => $('lora2-sel').value, write: v => { $('lora2-sel').value = v; onLoraChange(); }, el: 'lora2-sel' },
   'lora1-str':  { read: () => $('lora1-str').value, write: v => { $('lora1-str').value = v; $('lora1-str-val').textContent = parseFloat(v).toFixed(2); updateTrack($('lora1-str')); }, el: 'lora1-str' },
@@ -7010,7 +7543,9 @@ const FAV_HANDLERS = {
   'scheduler':  { read: () => $('sched-sel').value, write: v => { $('sched-sel').value = v; }, el: 'sched-sel' },
   'seed':       { read: () => $('seed').value,      write: v => { $('seed').value = v; }, el: 'seed' },
   'save-prefix':{ read: () => $('save-prefix').value, write: v => { $('save-prefix').value = v; syncSavePrefixPreview(); }, el: 'save-prefix' },
-  'ref-mode':   { read: () => $('ref-mode').value, write: v => { $('ref-mode').value = v; }, el: 'ref-mode' },
+  'hires-denoise': { read: () => $('hires-denoise').value, write: v => { $('hires-denoise').value = v; $('hires-denoise-val').textContent=parseFloat(v).toFixed(2); updateTrack($('hires-denoise')); }, el: 'hires-denoise' },
+  'face-denoise': { read: () => $('face-denoise').value, write: v => { $('face-denoise').value = v; $('face-denoise-val').textContent=parseFloat(v).toFixed(2); updateTrack($('face-denoise')); }, el: 'face-denoise' },
+  'ref-model':  { read: () => $('ref-model').value, write: v => { $('ref-model').value = v; }, el: 'ref-model' },
   'ref-denoise':{ read: () => $('ref-denoise').value, write: v => { $('ref-denoise').value = v; syncRefDenoise(); }, el: 'ref-denoise' },
   'vid-frames': { read: () => $('vid-frames').value, write: v => { $('vid-frames').value = v; syncSlider('vid-frames'); }, el: 'vid-frames' },
   'vid-guidance':{ read: () => $('vid-guidance').value, write: v => { $('vid-guidance').value = v; syncSlider('vid-guidance'); }, el: 'vid-guidance' },
@@ -7048,19 +7583,46 @@ function wireFavListeners() {
 }
 
 function attachFavStars() {
-  const SVG = '<svg viewBox="0 0 24 24"><polygon points="12 2 14.6 9 22 9.5 16.3 14.2 18.4 21.5 12 17.3 5.6 21.5 7.7 14.2 2 9.5 9.4 9 12 2"/></svg>';
+  const STAR_SVG = '<svg viewBox="0 0 24 24"><polygon points="12 2 14.6 9 22 9.5 16.3 14.2 18.4 21.5 12 17.3 5.6 21.5 7.7 14.2 2 9.5 9.4 9 12 2"/></svg>';
+  const PRESET_SVG = '<svg viewBox="0 0 24 24"><polygon points="11 2 9 13 15 13 13 22 21 10 14 10 16 2 11 2"/></svg>';
   document.querySelectorAll('[data-fav-key]').forEach(host => {
-    if (host.querySelector(':scope > .fav-star')) return;
+    if (host.querySelector(':scope > .fav-btns-container')) return;
     const key = host.getAttribute('data-fav-key');
-    const btn = document.createElement('button');
-    btn.type = 'button';
-    btn.className = 'fav-star';
-    btn.title = 'Mark as favorite (saves this value across reloads)';
-    btn.dataset.key = key;
-    btn.innerHTML = SVG;
-    btn.addEventListener('click', toggleFav);
-    if (isFavOn(key)) btn.classList.add('active');
-    host.appendChild(btn);
+    
+    // Create button container for right-aligned buttons
+    const btnContainer = document.createElement('div');
+    btnContainer.className = 'fav-btns-container';
+    btnContainer.style.display = 'flex';
+    btnContainer.style.alignItems = 'center';
+    btnContainer.style.gap = '4px';
+    
+    // Preset button (only for prompt and negative) - goes first (left of star)
+    if (key === 'prompt' || key === 'negative') {
+      const presetBtn = document.createElement('button');
+      presetBtn.type = 'button';
+      presetBtn.className = 'preset-btn';
+      presetBtn.title = 'Prompt presets';
+      presetBtn.dataset.presetType = key;
+      presetBtn.innerHTML = PRESET_SVG;
+      presetBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        openPresetsModal(key);
+      });
+      btnContainer.appendChild(presetBtn);
+    }
+    
+    // Star button - goes last (far right)
+    const starBtn = document.createElement('button');
+    starBtn.type = 'button';
+    starBtn.className = 'fav-star';
+    starBtn.title = 'Mark as favorite (saves this value across reloads)';
+    starBtn.dataset.key = key;
+    starBtn.innerHTML = STAR_SVG;
+    starBtn.addEventListener('click', toggleFav);
+    if (isFavOn(key)) starBtn.classList.add('active');
+    btnContainer.appendChild(starBtn);
+    
+    host.appendChild(btnContainer);
     host.classList.add('has-fav-star');
   });
 }
@@ -7563,6 +8125,13 @@ function loadSettings() {
   } catch(e) {}
   
   try {
+    const showSeedOverlay = localStorage.getItem('somni-show-seed-overlay');
+    if (showSeedOverlay !== null) {
+      $('show-seed-overlay').checked = showSeedOverlay === '1';
+    }
+  } catch(e) {}
+  
+  try {
     const theme = localStorage.getItem('somni-theme') || 'dark';
     updateSettingsThemeUI(theme);
   } catch(e) {}
@@ -7605,6 +8174,7 @@ function toggleNightlyMode() {
 function saveSettings() {
   try {
     localStorage.setItem('somni-comfyui-path', $('comfyui-path').value);
+    localStorage.setItem('somni-show-seed-overlay', $('show-seed-overlay').checked ? '1' : '0');
   } catch(e) {}
   
   try {
@@ -8099,6 +8669,8 @@ function initSomni() {
         const workflow = WORKFLOWS.find(w => w.id === savedWorkflowId);
         if (workflow) {
           loadWorkflow(savedWorkflowId);
+          // Restore favorite values again after loadWorkflow resets them
+          applyFavValues();
         }
       }
     } catch(e) {}
