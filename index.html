@@ -108,6 +108,10 @@
       from { opacity: 0; transform: translateY(8px); }
       to   { opacity: 1; transform: translateY(0); }
     }
+    @keyframes fade-in {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
     @keyframes pop-in {
       from { opacity: 0; transform: translateY(6px) scale(0.96); }
       to   { opacity: 1; transform: translateY(0) scale(1); }
@@ -128,6 +132,36 @@
         transition-duration: 0.01ms !important;
         scroll-behavior: auto !important;
       }
+    }
+
+    /* Custom Scrollbar Styles */
+    ::-webkit-scrollbar {
+      width: 10px;
+      height: 10px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--surface-3);
+      border-radius: 5px;
+      border: 2px solid transparent;
+      background-clip: padding-box;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--surface-4);
+      border-color: transparent;
+    }
+    ::-webkit-scrollbar-thumb:active {
+      background: var(--text-4);
+    }
+    ::-webkit-scrollbar-corner {
+      background: transparent;
+    }
+    /* Firefox scrollbar */
+    * {
+      scrollbar-width: thin;
+      scrollbar-color: var(--surface-3) transparent;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -262,47 +296,54 @@
     .settings-card {
       background: var(--surface);
       border: 1px solid var(--border-2);
-      border-radius: 16px;
-      width: 900px;
-      height: 600px;
+      border-radius: 20px;
+      width: 920px;
+      height: 620px;
       display: flex; flex-direction: column;
       overflow: hidden;
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.4);
     }
     .settings-header {
       display: flex; justify-content: space-between; align-items: center;
-      padding: 20px 24px;
+      padding: 24px 28px;
       border-bottom: 1px solid var(--border);
+      background: var(--surface-2);
     }
     .settings-title {
-      font-size: 18px; font-weight: 700; color: var(--text);
+      font-size: 20px; font-weight: 700; color: var(--text);
+      letter-spacing: -0.02em;
     }
     .settings-close {
       background: transparent; border: none; color: var(--text-2);
-      cursor: pointer; padding: 4px; border-radius: 6px;
+      cursor: pointer; padding: 8px; border-radius: 8px;
       transition: background .15s, color .15s;
       display: flex; align-items: center; justify-content: center;
     }
     .settings-close:hover {
-      background: var(--surface-2);
+      background: var(--surface-3);
       color: var(--text);
     }
     .settings-content {
       display: flex; flex: 1; overflow: hidden;
     }
     .settings-sidebar {
-      width: 200px; padding: 16px 0;
+      width: 220px; padding: 20px 0;
       border-right: 1px solid var(--border);
       display: flex; flex-direction: column;
-      gap: 4px;
+      gap: 2px;
+      background: var(--bg-2);
     }
     .settings-nav-item {
-      padding: 10px 20px;
+      padding: 12px 20px;
       cursor: pointer;
-      font-size: 13px; font-weight: 500;
+      font-size: 14px; font-weight: 500;
       color: var(--text-2);
-      border-radius: 6px;
-      margin: 0 8px;
+      border-radius: 8px;
+      margin: 0 12px;
       transition: background .15s, color .15s;
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
     .settings-nav-item:hover {
       background: var(--surface-2);
@@ -311,24 +352,33 @@
     .settings-nav-item.active {
       background: var(--accent-soft);
       color: var(--accent);
+      font-weight: 600;
     }
     .settings-main {
-      flex: 1; padding: 24px;
+      flex: 1; padding: 32px 32px 32px 40px;
       overflow-y: auto;
+      background: var(--surface);
     }
     .settings-section {
       display: none;
+      animation: fade-in 0.2s ease-out;
     }
     .settings-section.active {
       display: block;
     }
     .settings-section-title {
-      font-size: 16px; font-weight: 600; color: var(--text);
-      margin-bottom: 20px;
+      font-size: 22px; font-weight: 700; color: var(--text);
+      margin-bottom: 8px;
+      letter-spacing: -0.03em;
+    }
+    .settings-section-subtitle {
+      font-size: 14px; color: var(--text-3);
+      margin-bottom: 32px;
+      line-height: 1.5;
     }
     .settings-field {
-      margin-bottom: 24px;
-      padding-bottom: 24px;
+      margin-bottom: 32px;
+      padding-bottom: 32px;
       border-bottom: 1px solid var(--border);
     }
     .settings-field:last-child {
@@ -336,23 +386,38 @@
       padding-bottom: 0;
       border-bottom: none;
     }
+    .settings-field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
     .settings-label {
-      display: block; font-size: 12px; font-weight: 500;
-      color: var(--text-2);
+      display: block; font-size: 13px; font-weight: 600;
+      color: var(--text);
       margin-bottom: 8px;
+      letter-spacing: -0.01em;
+    }
+    .settings-description {
+      font-size: 13px; color: var(--text-3);
+      line-height: 1.5;
+      margin-top: 4px;
     }
     .settings-input {
-      width: 100%; padding: 10px 12px;
+      width: 100%; padding: 12px 16px;
       background: var(--surface-2);
       border: 1px solid var(--border-2);
-      border-radius: 8px;
+      border-radius: 10px;
       color: var(--text);
-      font-size: 13px;
+      font-size: 14px;
       font-family: inherit;
-      transition: border-color .15s, box-shadow .15s;
+      transition: border-color .15s, box-shadow .15s, background .15s;
     }
     .settings-input:focus {
       outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft);
+      background: var(--surface-3);
+    }
+    .settings-input::placeholder {
+      color: var(--text-4);
     }
     .settings-path-row {
       display: flex; gap: 8px;
@@ -367,65 +432,89 @@
     .password-change-form {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 16px;
+      padding: 20px;
+      background: var(--surface-2);
+      border-radius: 12px;
+      border: 1px solid var(--border);
     }
     .password-change-form .settings-input {
       width: 100%;
     }
     .settings-toggle {
       display: flex;
-      align-items: center;
-      gap: 12px;
+      align-items: flex-start;
+      gap: 16px;
+      padding: 16px;
+      background: var(--surface-2);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      transition: border-color .15s, background .15s;
+    }
+    .settings-toggle:hover {
+      border-color: var(--border-2);
+      background: var(--surface-3);
     }
     .settings-toggle input[type="checkbox"] {
       display: none;
     }
     .toggle-label {
       position: relative;
-      width: 44px;
-      height: 24px;
-      background: var(--surface-2);
+      width: 48px;
+      height: 26px;
+      background: var(--surface-3);
       border: 1px solid var(--border-2);
-      border-radius: 12px;
+      border-radius: 13px;
       cursor: pointer;
       transition: background .2s, border-color .2s;
+      flex-shrink: 0;
     }
     .toggle-label::after {
       content: '';
       position: absolute;
-      top: 2px;
-      left: 2px;
+      top: 3px;
+      left: 3px;
       width: 18px;
       height: 18px;
       background: var(--text-2);
       border-radius: 50%;
-      transition: transform .2s;
+      transition: transform .2s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     }
     .settings-toggle input[type="checkbox"]:checked + .toggle-label {
       background: var(--accent);
       border-color: var(--accent);
     }
     .settings-toggle input[type="checkbox"]:checked + .toggle-label::after {
-      transform: translateX(20px);
+      transform: translateX(22px);
       background: #fff;
     }
+    .toggle-content {
+      flex: 1;
+    }
     .toggle-description {
-      font-size: 12px;
-      color: var(--text-2);
+      font-size: 13px;
+      color: var(--text-3);
+      line-height: 1.4;
+      margin-top: 4px;
     }
     .settings-btn {
-      padding: 10px 16px;
+      padding: 12px 20px;
       background: var(--surface-2);
       border: 1px solid var(--border-2);
-      border-radius: 8px;
+      border-radius: 10px;
       color: var(--text);
-      font-size: 13px; font-weight: 500;
+      font-size: 14px; font-weight: 500;
       cursor: pointer;
-      transition: background .15s, border-color .15s;
+      transition: background .15s, border-color .15s, transform .1s;
     }
     .settings-btn:hover {
       background: var(--surface-3);
       border-color: var(--border-3);
+      transform: translateY(-1px);
+    }
+    .settings-btn:active {
+      transform: translateY(0);
     }
     .settings-btn-danger {
       background: rgba(217, 48, 37, 0.1);
@@ -436,78 +525,90 @@
       background: rgba(217, 48, 37, 0.15);
       border-color: rgba(217, 48, 37, 0.4);
     }
+    .settings-actions-row {
+      display: flex;
+      gap: 12px;
+    }
+    .settings-actions-row .settings-btn {
+      flex: 1;
+    }
     .settings-theme-toggle {
-      display: flex; gap: 8px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
     }
     .settings-theme-btn {
-      flex: 1; padding: 10px 16px;
+      padding: 16px;
       background: var(--surface-2);
-      border: 1px solid var(--border-2);
-      border-radius: 8px;
+      border: 2px solid var(--border);
+      border-radius: 12px;
       color: var(--text-2);
-      font-size: 13px; font-weight: 500;
+      font-size: 14px; font-weight: 500;
       cursor: pointer;
       transition: all .15s;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 6px;
+      gap: 8px;
+      min-height: 80px;
     }
     .settings-theme-btn:hover {
       background: var(--surface-3);
-      border-color: var(--border-3);
+      border-color: var(--border-2);
+      transform: translateY(-2px);
     }
     .settings-theme-btn.active {
-      background: var(--accent);
+      background: var(--accent-soft);
       border-color: var(--accent);
-      color: var(--accent-text);
+      color: var(--accent);
+      font-weight: 600;
     }
     .settings-theme-btn[data-theme="dark"].active {
-      background: var(--accent-dark, var(--accent));
+      background: rgba(99, 102, 241, 0.15);
       border-color: var(--accent-dark, var(--accent));
     }
     .settings-theme-btn[data-theme="light"].active {
-      background: var(--accent-light, var(--accent));
+      background: rgba(26, 115, 232, 0.15);
       border-color: var(--accent-light, var(--accent));
     }
     .settings-theme-btn svg {
+      width: 24px;
+      height: 24px;
       flex-shrink: 0;
     }
-    .settings-text-size {
-      display: flex; gap: 8px;
-    }
-    .settings-size-btn {
-      flex: 1; padding: 10px 16px;
-      background: var(--surface-2);
-      border: 1px solid var(--border-2);
-      border-radius: 8px;
-      color: var(--text-2);
-      font-size: 13px; font-weight: 500;
-      cursor: pointer;
-      transition: all .15s;
-    }
-    .settings-size-btn:hover {
-      background: var(--surface-3);
-      border-color: var(--border-3);
-    }
-    .settings-size-btn.active {
-      background: var(--accent);
-      border-color: var(--accent);
-      color: var(--accent-text);
-    }
+
     .settings-color-picker {
-      display: flex; align-items: center; gap: 12px;
+      display: flex; align-items: center; gap: 16px;
+      padding: 16px;
+      background: var(--surface-2);
+      border-radius: 12px;
+      border: 1px solid var(--border);
     }
     .settings-color-picker input[type="color"] {
-      width: 48px; height: 48px;
+      width: 56px; height: 56px;
       border: none;
-      border-radius: 8px;
+      border-radius: 12px;
       cursor: pointer;
       background: transparent;
+      flex-shrink: 0;
     }
     .settings-color-warning {
-      font-size: 11px; color: #f57c00;
+      font-size: 12px; color: #f57c00;
       font-weight: 500;
+    }
+    .settings-color-info {
+      flex: 1;
+    }
+    .settings-color-label {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .settings-color-desc {
+      font-size: 13px;
+      color: var(--text-3);
     }
     .settings-placeholder {
       color: var(--text-3);
@@ -740,6 +841,17 @@
     }
     .presets-add-btn:hover { transform: scale(1.08); }
     .presets-add-btn svg { width: 18px; height: 18px; }
+    .presets-close-btn {
+      background: transparent; border: none; color: var(--text-2);
+      cursor: pointer; padding: 4px; border-radius: 6px;
+      transition: background .15s, color .15s;
+      display: flex; align-items: center; justify-content: center;
+      margin-left: 8px;
+    }
+    .presets-close-btn:hover {
+      background: var(--surface-2);
+      color: var(--text);
+    }
     .presets-list { padding: 16px; display: flex; flex-direction: column; gap: 10px; }
     .preset-card {
       background: var(--bg-2);
@@ -1519,37 +1631,34 @@
     }
     .sidebar-body {
       flex: 1; overflow-y: auto; overflow-x: hidden;
-      padding: 16px var(--pad) 8px;
-      display: flex; flex-direction: column; gap: 14px;
+      padding: 20px var(--pad) 12px;
+      display: flex; flex-direction: column; gap: 16px;
     }
     .sec-sep {
       border: none; border-top: 1px solid var(--border);
-      margin: 2px 0;
+      margin: 4px 0;
     }
-    .sidebar-body::-webkit-scrollbar { width: 6px; }
-    .sidebar-body::-webkit-scrollbar-thumb { background: var(--border-2); border-radius: 3px; }
-    .sidebar-body::-webkit-scrollbar-thumb:hover { background: var(--border-3); }
 
     /* Section */
-    .sec { display: flex; flex-direction: column; gap: 8px; }
+    .sec { display: flex; flex-direction: column; gap: 12px; }
     .sec-label {
       font-size: 10px; font-weight: 700;
       letter-spacing: 0.06em; text-transform: uppercase;
-      color: var(--text-3); height: 16px;
+      color: var(--text-3); height: 18px;
       display: flex; align-items: center; justify-content: space-between;
       text-transform: none;
     }
 
     /* Tabs */
     .tabs {
-      display: flex; height: 32px;
+      display: flex; height: 36px;
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: var(--r-md); padding: 2px; gap: 1px;
+      border-radius: var(--r-md); padding: 3px; gap: 2px;
     }
     .tab {
       flex: 1; border: none; background: transparent; color: var(--text-3);
-      border-radius: 7px; font-size: 12px; font-weight: 500; cursor: pointer;
+      border-radius: 6px; font-size: 12px; font-weight: 500; cursor: pointer;
       transition: color var(--dur-fast) var(--ease-std),
                   background .25s var(--ease-out);
       display: flex; align-items: center; justify-content: center;
@@ -1605,7 +1714,7 @@
     .mode-switch-container {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 12px;
     }
     .mode-switch-lbl {
       font-size: 11px;
@@ -1892,15 +2001,15 @@
     /* Form controls */
     label {
       display: block; font-size: 11px; font-weight: 500;
-      color: var(--text-3); margin-bottom: 5px;
+      color: var(--text-3); margin-bottom: 6px;
     }
     label.field-head {
       font-size: 10px; font-weight: 700;
       letter-spacing: 0.06em; text-transform: uppercase;
-      color: var(--text-3); margin-bottom: 5px;
+      color: var(--text-3); margin-bottom: 6px;
     }
     input[type="number"], input[type="text"], select {
-      width: 100%; height: var(--h); padding: 0 11px;
+      width: 100%; height: var(--h); padding: 0 12px;
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: var(--r-sm); color: var(--text);
@@ -1916,9 +2025,9 @@
     }
     input[type="number"] { appearance: textfield; -moz-appearance: textfield; }
     input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; }
-    input:disabled, select:disabled { 
-      opacity: 0.4; 
-      cursor: not-allowed; 
+    input:disabled, select:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
       background: var(--surface-2);
       border-color: var(--border);
     }
@@ -1927,8 +2036,8 @@
       -webkit-appearance: none;
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%239a9aa2' fill='none' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
       background-repeat: no-repeat;
-      background-position: right 11px center;
-      padding-right: 28px; cursor: pointer; text-overflow: ellipsis;
+      background-position: right 12px center;
+      padding-right: 30px; cursor: pointer; text-overflow: ellipsis;
       transition: border-color .15s, box-shadow .15s;
     }
     select:hover {
@@ -1952,20 +2061,20 @@
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: var(--r-md);
-      padding: 10px 12px;
+      padding: 12px 14px;
       color: var(--text);
       font-size: 13px;
       line-height: 1.5;
       resize: none;
-      min-height: 70px;
+      min-height: 72px;
       transition: border-color .12s, box-shadow .12s;
     }
     textarea:hover:not(:focus) { border-color: var(--border-2); }
     textarea:focus {
       border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft);
     }
-    #pos { min-height: 92px; }
-    #neg { min-height: 56px; }
+    #pos { min-height: 96px; }
+    #neg { min-height: 60px; }
 
     /* Textarea expand button */
     .textarea-expand-btn {
@@ -1999,18 +2108,18 @@
       height: 14px;
     }
 
-    .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     .field { display: flex; flex-direction: column; }
 
     /* Range sliders */
-    .slider-field { display: flex; flex-direction: column; gap: 9px; }
+    .slider-field { display: flex; flex-direction: column; gap: 10px; }
     .slider-header {
       display: flex; justify-content: space-between; align-items: center;
     }
     .slider-header label { margin: 0; }
     .slider-val {
       font-size: 12px; font-weight: 500; color: var(--text-2);
-      font-variant-numeric: tabular-nums; min-width: 30px; text-align: right;
+      font-variant-numeric: tabular-nums; min-width: 32px; text-align: right;
     }
     input[type="range"] {
       -webkit-appearance: none; appearance: none;
@@ -2067,9 +2176,9 @@
     }
 
     /* Aspect ratio presets */
-    .aspect-row { display: flex; gap: 4px; flex-wrap: wrap; }
+    .aspect-row { display: flex; gap: 6px; flex-wrap: wrap; }
     .asp-btn {
-      height: 26px; padding: 0 10px;
+      height: 28px; padding: 0 12px;
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: var(--r-sm); color: var(--text-2);
@@ -2088,7 +2197,7 @@
     }
 
     /* Seed input row */
-    .seed-row { display: flex; align-items: flex-end; gap: 6px; }
+    .seed-row { display: flex; align-items: flex-end; gap: 8px; }
     .seed-row .field { flex: 1; min-width: 0; }
     .ico-btn {
       flex-shrink: 0; width: var(--h); height: var(--h);
@@ -2128,9 +2237,9 @@
       max-height: 0;
       transition: max-height .26s cubic-bezier(.4,0,.2,1);
     }
-    .adv-body.open { max-height: 340px; }
-    .adv-inner { display: flex; flex-direction: column; gap: 8px; padding-top: 2px; }
-    .setting-desc { font-size: 10px; color: var(--text-4); line-height: 1.5; margin-top: 1px; }
+    .adv-body.open { max-height: 360px; }
+    .adv-inner { display: flex; flex-direction: column; gap: 10px; padding-top: 4px; }
+    .setting-desc { font-size: 10px; color: var(--text-4); line-height: 1.5; margin-top: 2px; }
 
     /* Mode-specific visibility */
     .flux-only, .wan-only, .hunyuan-only, .video-only, .image-only, .hires-fix-only, .face-detailer-only { display: none; }
@@ -2157,22 +2266,22 @@
 
     /* Sidebar footer */
     .sidebar-foot {
-      padding: 12px 14px 14px;
+      padding: 16px 18px 18px;
       border-top: 1px solid var(--border);
-      display: flex; flex-direction: column; gap: 8px; flex-shrink: 0;
+      display: flex; flex-direction: column; gap: 10px; flex-shrink: 0;
     }
     .err-box {
-      display: none; padding: 9px 11px;
+      display: none; padding: 10px 12px;
       background: rgba(226,93,87,0.08); border: 1px solid rgba(226,93,87,0.22);
       border-radius: var(--r-sm); color: #f08983;
       font-size: 11.5px; line-height: 1.5; word-break: break-word;
       max-height: 80px; overflow-y: auto;
       display: flex;
       align-items: flex-start;
-      gap: 8px;
+      gap: 10px;
     }
     .err-box.has-retry {
-      padding: 8px 11px;
+      padding: 10px 12px;
     }
     .err-message {
       flex: 1;
@@ -2264,10 +2373,10 @@
       animation: spin 1s linear infinite;
     }
     .gen-row {
-      display: flex; gap: 8px; width: 100%; align-items: stretch;
+      display: flex; gap: 10px; width: 100%; align-items: stretch;
     }
     .btn-gen {
-      flex: 1; min-width: 0; height: 38px; border: none;
+      flex: 1; min-width: 0; height: 40px; border: none;
       border-radius: var(--r-md);
       background: var(--accent);
       color: var(--accent-text); font-size: 13px; font-weight: 600;
@@ -2280,7 +2389,7 @@
     .batch-field {
       position: relative;
       flex: 0 0 auto;
-      width: 74px; height: 38px;
+      width: 80px; height: 40px;
     }
     .batch-field input {
       width: 100%; height: 100%;
@@ -2481,16 +2590,13 @@
 
     .gal-body {
       flex: 1; min-height: 0; overflow-y: auto; overflow-x: hidden;
-      padding: 12px; display: grid; gap: 6px;
+      padding: 16px; display: grid; gap: 8px;
       align-content: start;
       grid-template-columns: repeat(4, 1fr);
-      grid-auto-rows: calc((var(--gallery-w) - 24px - 18px) / 4);
+      grid-auto-rows: calc((var(--gallery-w) - 32px - 24px) / 4);
     }
-    .gal-body.cols-3 { grid-template-columns: repeat(4, 1fr); }
+    .gal-body.cols-3 { grid-template-columns: repeat(3, 1fr); }
     .gal-body.hidden { visibility: hidden; }
-    .gal-body::-webkit-scrollbar { width: 6px; }
-    .gal-body::-webkit-scrollbar-thumb { background: var(--border-2); border-radius: 3px; }
-    .gal-body::-webkit-scrollbar-thumb:hover { background: var(--border-3); }
 
     .gal-item {
       position: relative;
@@ -2523,17 +2629,17 @@
 
 
     .gal-del {
-      position: absolute; top: 4px; right: 4px;
-      width: 20px; height: 20px; padding: 0;
+      position: absolute; top: 6px; right: 6px;
+      width: 22px; height: 22px; padding: 0;
       background: rgba(15,15,18,0.8); backdrop-filter: blur(6px);
-      border: 1px solid rgba(255,255,255,0.1); border-radius: 5px;
+      border: 1px solid rgba(255,255,255,0.1); border-radius: 6px;
       color: rgba(255,255,255,0.7); cursor: pointer;
       display: flex; align-items: center; justify-content: center;
       opacity: 0; transition: opacity .12s, background .12s, color .12s;
     }
     .gal-item:hover .gal-del { opacity: 1; }
     .gal-del:hover { background: rgba(226,93,87,0.7); border-color: rgba(226,93,87,0.5); color: #fff; }
-    .gal-del svg { width: 10px; height: 10px; }
+    .gal-del svg { width: 11px; height: 11px; }
     .gal-item.deleting { opacity: 0.28; pointer-events: none; }
     .gal-item.loading {
       pointer-events: none;
@@ -2553,13 +2659,13 @@
 
 
     .gal-empty {
-      grid-column: 1 / -1; padding: 44px 0;
+      grid-column: 1 / -1; padding: 48px 0;
       display: flex; flex-direction: column; align-items: center;
-      justify-content: center; gap: 8px;
+      justify-content: center; gap: 12px;
     }
     .gal-empty-icon { color: var(--text-4); }
-    .gal-empty-title { font-size: 12px; color: var(--text-2); font-weight: 500; }
-    .gal-empty-sub { font-size: 11px; color: var(--text-3); text-align: center; line-height: 1.5; max-width: 180px; }
+    .gal-empty-title { font-size: 13px; color: var(--text-2); font-weight: 500; }
+    .gal-empty-sub { font-size: 12px; color: var(--text-3); text-align: center; line-height: 1.5; max-width: 200px; }
 
     .viewer {
       position: fixed; inset: 0;
@@ -2653,7 +2759,7 @@
     header { position: relative; }
     .easy-wrap {
       position: absolute; left: 50%; transform: translateX(-50%);
-      display: flex; align-items: center; gap: 9px; user-select: none;
+      display: flex; align-items: center; gap: 10px; user-select: none;
     }
     .easy-label-full { font-size: 12px; font-weight: 500; color: var(--text-2); }
     .easy-label-short { display: none; font-size: 12px; font-weight: 600; color: var(--text-2); letter-spacing: 0.03em; }
@@ -2662,7 +2768,7 @@
       .easy-label-short { display: inline; }
     }
     .easy-tog {
-      width: 36px; height: 20px;
+      width: 38px; height: 22px;
       border-radius: 999px;
       background: var(--surface-3);
       border: 1px solid var(--border);
@@ -2679,7 +2785,7 @@
     }
     .easy-knob {
       position: absolute; top: 2px; left: 2px;
-      width: 14px; height: 14px; border-radius: 50%;
+      width: 16px; height: 16px; border-radius: 50%;
       background: #fff;
       transition: transform .45s var(--ease-pop), background .35s var(--ease-std), width .25s var(--ease-std);
       display: block; pointer-events: none;
@@ -2695,17 +2801,17 @@
     body.easy-mode .easy-show { display: block !important; }
 
     /* Easy mode spacing (legacy — sidebar is hidden anyway) */
-    body.easy-mode .sec { gap: 10px; }
+    body.easy-mode .sec { gap: 12px; }
 
     /* Easy hint text under elements */
     .easy-hint { font-size: 11px; color: var(--text-3); line-height: 1.5; margin-top: -2px; display: none; }
     body.easy-mode .easy-hint { display: block; }
 
     /* Step presets row */
-    .easy-preset-row { display: none; gap: 6px; }
+    .easy-preset-row { display: none; gap: 8px; }
     body.easy-mode .easy-preset-row { display: flex !important; animation: fade-up var(--dur-mid) var(--ease-out); }
     .easy-preset-btn {
-      flex: 1; height: 46px; padding: 0 8px;
+      flex: 1; height: 48px; padding: 0 10px;
       border-radius: var(--r-sm);
       background: var(--surface);
       border: 1px solid var(--border);
@@ -4143,6 +4249,12 @@
           <line x1="5" y1="12" x2="19" y2="12"></line>
         </svg>
       </button>
+      <button class="presets-close-btn" onclick="closePresetsModal()" title="Close">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
     </div>
     <div class="presets-list" id="presets-list"></div>
   </div>
@@ -4220,6 +4332,12 @@
           <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
         </svg>
       </button>
+      <button class="presets-close-btn" onclick="closePresetsModal()" title="Close">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
     </div>
     <div class="presets-list" id="presets-list"></div>
   </div>
@@ -4281,86 +4399,130 @@
       </div>
       <div class="settings-main">
         <div class="settings-section active" id="settings-general">
-          <div class="settings-field">
-            <div class="settings-toggle">
-              <input type="checkbox" id="show-seed-overlay" checked>
-              <label class="toggle-label" for="show-seed-overlay"></label>
-              <div>
-                <div class="settings-label">Show seed overlay inside Image Viewer</div>
-                <div class="toggle-description">Display seed value on images and videos in the viewer</div>
+          <div class="settings-section-title">General Settings</div>
+          <div class="settings-section-subtitle">Configure basic application behavior and preferences</div>
+
+          <div class="settings-field-group">
+            <div class="settings-field">
+              <div class="settings-toggle">
+                <input type="checkbox" id="show-seed-overlay" checked>
+                <label class="toggle-label" for="show-seed-overlay"></label>
+                <div class="toggle-content">
+                  <div class="settings-label">Show seed overlay inside Image Viewer</div>
+                  <div class="toggle-description">Display seed value on images and videos in the viewer</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="settings-field">
+              <div class="settings-toggle">
+                <input type="checkbox" id="clear-gallery-shutdown">
+                <label class="toggle-label" for="clear-gallery-shutdown"></label>
+                <div class="toggle-content">
+                  <div class="settings-label">Clear gallery on shutdown</div>
+                  <div class="toggle-description">Automatically clear the gallery when closing the application</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="settings-field">
+              <label class="settings-label">Keyboard Shortcuts</label>
+              <div class="settings-description">View and customize keyboard shortcuts</div>
+              <button class="settings-btn" onclick="openKeyboardShortcuts()">View Shortcuts</button>
+            </div>
+
+            <div class="settings-field">
+              <label class="settings-label">Export/Import Settings</label>
+              <div class="settings-description">Backup or restore your configuration</div>
+              <div class="settings-actions-row">
+                <button class="settings-btn" onclick="exportSettings()">Export Settings</button>
+                <button class="settings-btn" onclick="importSettings()">Import Settings</button>
+              </div>
+            </div>
+
+            <div class="settings-field">
+              <label class="settings-label">ComfyUI Path</label>
+              <div class="settings-description">The file path to your ComfyUI installation</div>
+              <div class="settings-path-row">
+                <input type="text" id="comfyui-path" class="settings-input" placeholder="/path/to/comfyui">
+                <button class="settings-btn" onclick="browseComfyUIPath()" title="Browse">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+                  </svg>
+                </button>
+                <button class="settings-btn" onclick="saveComfyUIPath()" title="Save">Save</button>
               </div>
             </div>
           </div>
-          <div class="settings-field">
-            <label class="settings-label">ComfyUI Path</label>
-            <div class="settings-path-row">
-              <input type="text" id="comfyui-path" class="settings-input" placeholder="/path/to/comfyui">
-              <button class="settings-btn" onclick="browseComfyUIPath()" title="Browse">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
-                </svg>
-              </button>
-              <button class="settings-btn" onclick="saveComfyUIPath()" title="Save">Save</button>
-            </div>
-          </div>
+
           <div class="settings-field">
             <button class="settings-btn settings-btn-danger" onclick="uninstallSomni()">Uninstall somni</button>
           </div>
         </div>
         <div class="settings-section" id="settings-appearance">
-          <div class="settings-field">
-            <label class="settings-label">Theme</label>
-            <div class="settings-theme-toggle">
-              <button class="settings-theme-btn" data-theme="dark" onclick="setSettingsTheme('dark')">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-                </svg>
-                Dark
-              </button>
-              <button class="settings-theme-btn" data-theme="light" onclick="setSettingsTheme('light')">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <circle cx="12" cy="12" r="5"></circle>
-                  <line x1="12" y1="1" x2="12" y2="3"></line>
-                  <line x1="12" y1="21" x2="12" y2="23"></line>
-                  <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                  <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                  <line x1="1" y1="12" x2="3" y2="12"></line>
-                  <line x1="21" y1="12" x2="23" y2="12"></line>
-                  <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                  <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-                </svg>
-                Light
-              </button>
+          <div class="settings-section-title">Appearance</div>
+          <div class="settings-section-subtitle">Customize the visual theme and colors</div>
+
+          <div class="settings-field-group">
+            <div class="settings-field">
+              <label class="settings-label">Theme</label>
+              <div class="settings-description">Choose between light and dark mode</div>
+              <div class="settings-theme-toggle">
+                <button class="settings-theme-btn" data-theme="dark" onclick="setSettingsTheme('dark')">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                  </svg>
+                  Dark
+                </button>
+                <button class="settings-theme-btn" data-theme="light" onclick="setSettingsTheme('light')">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="5"></circle>
+                    <line x1="12" y1="1" x2="12" y2="3"></line>
+                    <line x1="12" y1="21" x2="12" y2="23"></line>
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                    <line x1="1" y1="12" x2="3" y2="12"></line>
+                    <line x1="21" y1="12" x2="23" y2="12"></line>
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                  </svg>
+                  Light
+                </button>
+              </div>
             </div>
-          </div>
-          <div class="settings-field">
-            <label class="settings-label">Text Size</label>
-            <div class="settings-text-size">
-              <button class="settings-size-btn" data-size="50" onclick="setTextSize(50)">50%</button>
-              <button class="settings-size-btn" data-size="75" onclick="setTextSize(75)">75%</button>
-              <button class="settings-size-btn active" data-size="100" onclick="setTextSize(100)">100%</button>
-              <button class="settings-size-btn" data-size="125" onclick="setTextSize(125)">125%</button>
-              <button class="settings-size-btn" data-size="150" onclick="setTextSize(150)">150%</button>
+
+            <div class="settings-field">
+              <label class="settings-label">Accent Color (Dark Mode)</label>
+              <div class="settings-color-picker">
+                <input type="color" id="accent-dark" value="#6366f1" onchange="setAccentColor('dark', this.value)">
+                <div class="settings-color-info">
+                  <div class="settings-color-label">Primary accent color</div>
+                  <div class="settings-color-desc">Customize the accent color for dark mode</div>
+                  <div class="settings-color-warning" id="accent-dark-warning" style="display:none">Color too dark for dark mode</div>
+                </div>
+              </div>
             </div>
-          </div>
-          <div class="settings-field">
-            <label class="settings-label">Accent Color (Dark Mode)</label>
-            <div class="settings-color-picker">
-              <input type="color" id="accent-dark" value="#6366f1" onchange="setAccentColor('dark', this.value)">
-              <div class="settings-color-warning" id="accent-dark-warning" style="display:none">Color too dark for dark mode</div>
-            </div>
-          </div>
-          <div class="settings-field">
-            <label class="settings-label">Accent Color (Light Mode)</label>
-            <div class="settings-color-picker">
-              <input type="color" id="accent-light" value="#1a73e8" onchange="setAccentColor('light', this.value)">
-              <div class="settings-color-warning" id="accent-light-warning" style="display:none">Color too light for light mode</div>
+
+            <div class="settings-field">
+              <label class="settings-label">Accent Color (Light Mode)</label>
+              <div class="settings-color-picker">
+                <input type="color" id="accent-light" value="#1a73e8" onchange="setAccentColor('light', this.value)">
+                <div class="settings-color-info">
+                  <div class="settings-color-label">Primary accent color</div>
+                  <div class="settings-color-desc">Customize the accent color for light mode</div>
+                  <div class="settings-color-warning" id="accent-light-warning" style="display:none">Color too light for light mode</div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
         <div class="settings-section" id="settings-security">
+          <div class="settings-section-title">Security</div>
+          <div class="settings-section-subtitle">Manage password and access settings</div>
+
           <div class="settings-field">
             <label class="settings-label">Change Password</label>
+            <div class="settings-description">Update your security credentials</div>
             <div class="password-change-form">
               <input type="password" id="current-password" class="settings-input" placeholder="Current password">
               <input type="password" id="new-password" class="settings-input" placeholder="New password">
@@ -4370,32 +4532,51 @@
           </div>
         </div>
         <div class="settings-section" id="settings-versions">
-          <div class="settings-field">
-            <div class="settings-current-version" id="settings-current-version">
-              <div class="version-label">Current Version</div>
-              <div class="version-value" id="current-version-value">Loading...</div>
+          <div class="settings-section-title">Versions</div>
+          <div class="settings-section-subtitle">Manage updates and release channels</div>
+
+          <div class="settings-field-group">
+            <div class="settings-field">
+              <div class="settings-current-version" id="settings-current-version">
+                <div class="version-label">Current Version</div>
+                <div class="version-value" id="current-version-value">Loading...</div>
+              </div>
             </div>
-          </div>
-          <div class="settings-field">
-            <label class="settings-label">Nightly Mode</label>
-            <div class="settings-toggle">
-              <input type="checkbox" id="nightly-mode-toggle" onchange="toggleNightlyMode()">
-              <label for="nightly-mode-toggle" class="toggle-label"></label>
-              <span class="toggle-description">Auto-update to nightly builds on startup</span>
+
+            <div class="settings-field">
+              <div class="settings-toggle">
+                <input type="checkbox" id="nightly-mode-toggle" onchange="toggleNightlyMode()">
+                <label for="nightly-mode-toggle" class="toggle-label"></label>
+                <div class="toggle-content">
+                  <div class="settings-label">Nightly Mode</div>
+                  <div class="toggle-description">Auto-update to nightly builds on startup</div>
+                </div>
+              </div>
             </div>
-          </div>
-          <div class="settings-field">
-            <div class="settings-releases" id="settings-releases">
-              <div class="releases-loading">Loading releases...</div>
+
+            <div class="settings-field">
+              <label class="settings-label">Available Releases</label>
+              <div class="settings-description">Browse and install different versions</div>
+              <div class="settings-releases" id="settings-releases">
+                <div class="releases-loading">Loading releases...</div>
+              </div>
             </div>
           </div>
         </div>
         <div class="settings-section" id="settings-about">
-          <div class="settings-field">
-            <div class="settings-license" id="settings-license">Loading license...</div>
-          </div>
-          <div class="settings-field">
-            <p class="settings-attribution">made by <a href="https://github.com/searcc" target="_blank">sZearcc</a></p>
+          <div class="settings-section-title">About</div>
+          <div class="settings-section-subtitle">License information and credits</div>
+
+          <div class="settings-field-group">
+            <div class="settings-field">
+              <label class="settings-label">License</label>
+              <div class="settings-description">MIT License - do whatever you want, just don't blame me</div>
+              <div class="settings-license" id="settings-license">Loading license...</div>
+            </div>
+
+            <div class="settings-field">
+              <p class="settings-attribution">made by <a href="https://github.com/searcc" target="_blank">sZearcc</a></p>
+            </div>
           </div>
         </div>
       </div>
@@ -8107,6 +8288,55 @@ function openSettings() {
 function closeSettings() {
   $('settings-modal').classList.remove('show');
   saveSettings();
+  
+  // Check if clear gallery on shutdown is enabled
+  try {
+    const clearGallery = localStorage.getItem('somni-clear-gallery-shutdown') === '1';
+    if (clearGallery) {
+      clearGalleryItems();
+    }
+  } catch(e) {}
+}
+
+function clearGalleryItems() {
+  try {
+    const galleryItems = document.querySelectorAll('.gal-item');
+    galleryItems.forEach(item => {
+      const img = item.querySelector('img');
+      const video = item.querySelector('video');
+      let filename = null;
+      
+      if (img && img.src) {
+        // Extract filename from the src URL (format: /view?filename=...)
+        const urlParams = new URLSearchParams(img.src.split('?')[1]);
+        filename = urlParams.get('filename');
+        if (filename) {
+          fetch('/__delete', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ filename: filename })
+          }).catch(() => {});
+        }
+      }
+      if (video && video.src) {
+        const urlParams = new URLSearchParams(video.src.split('?')[1]);
+        filename = urlParams.get('filename');
+        if (filename) {
+          fetch('/__delete', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ filename: filename })
+          }).catch(() => {});
+        }
+      }
+      item.remove();
+    });
+    // Clear the history array
+    state.history = [];
+    state.meta.clear();
+    $('gal-count').textContent = '';
+    renderHistory();
+  } catch(e) {}
 }
 
 function switchSettingsSection(section) {
@@ -8130,20 +8360,19 @@ function loadSettings() {
       $('show-seed-overlay').checked = showSeedOverlay === '1';
     }
   } catch(e) {}
+
+  try {
+    const clearGalleryShutdown = localStorage.getItem('somni-clear-gallery-shutdown');
+    if (clearGalleryShutdown !== null) {
+      $('clear-gallery-shutdown').checked = clearGalleryShutdown === '1';
+    }
+  } catch(e) {}
   
   try {
     const theme = localStorage.getItem('somni-theme') || 'dark';
     updateSettingsThemeUI(theme);
   } catch(e) {}
-  
-  try {
-    const textSize = localStorage.getItem('somni-text-size') || '100';
-    updateTextSizeUI(textSize);
-    const baseSize = 13;
-    const newSize = (textSize / 100) * baseSize;
-    document.documentElement.style.fontSize = newSize + 'px';
-  } catch(e) {}
-  
+
   try {
     const accentDark = localStorage.getItem('somni-accent-dark') || '#6366f1';
     const accentLight = localStorage.getItem('somni-accent-light') || '#1a73e8';
@@ -8175,8 +8404,9 @@ function saveSettings() {
   try {
     localStorage.setItem('somni-comfyui-path', $('comfyui-path').value);
     localStorage.setItem('somni-show-seed-overlay', $('show-seed-overlay').checked ? '1' : '0');
+    localStorage.setItem('somni-clear-gallery-shutdown', $('clear-gallery-shutdown').checked ? '1' : '0');
   } catch(e) {}
-  
+
   try {
     localStorage.setItem('somni-accent-dark', $('accent-dark').value);
     localStorage.setItem('somni-accent-light', $('accent-light').value);
@@ -8225,18 +8455,68 @@ function updateSettingsThemeUI(theme) {
   });
 }
 
-function setTextSize(size) {
-  updateTextSizeUI(size);
-  const baseSize = 13;
-  const newSize = (size / 100) * baseSize;
-  document.documentElement.style.fontSize = newSize + 'px';
-  localStorage.setItem('somni-text-size', size);
+
+
+function openKeyboardShortcuts() {
+  alert('Keyboard Shortcuts:\n\nGenerate: Enter or Ctrl+G\nCancel: Escape\nToggle Sidebar: Ctrl+B\nToggle Gallery: Ctrl+G\nNext Image: Right Arrow\nPrevious Image: Left Arrow\nZoom In: +\nZoom Out: -\nReset Zoom: 0\nCopy Seed: Ctrl+C\nSave Image: Ctrl+S\nDelete Image: Delete\nOpen Settings: Ctrl+,\nQuick Add to Favorites: Ctrl+F');
 }
 
-function updateTextSizeUI(size) {
-  document.querySelectorAll('.settings-size-btn').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.size === size);
-  });
+function exportSettings() {
+  try {
+    const settings = {
+      comfyuiPath: localStorage.getItem('somni-comfyui-path'),
+      showSeedOverlay: localStorage.getItem('somni-show-seed-overlay'),
+      clearGalleryShutdown: localStorage.getItem('somni-clear-gallery-shutdown'),
+      theme: localStorage.getItem('somni-theme'),
+      accentDark: localStorage.getItem('somni-accent-dark'),
+      accentLight: localStorage.getItem('somni-accent-light'),
+      nightlyMode: localStorage.getItem('somni-nightly-mode')
+    };
+
+    const dataStr = JSON.stringify(settings, null, 2);
+    const dataBlob = new Blob([dataStr], {type: 'application/json'});
+    const url = URL.createObjectURL(dataBlob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'somni-settings-backup.json';
+    link.click();
+    URL.revokeObjectURL(url);
+    showToast('Settings exported successfully', 'success');
+  } catch(e) {
+    showToast('Failed to export settings', 'error');
+  }
+}
+
+function importSettings() {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '.json';
+  input.onchange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      try {
+        const settings = JSON.parse(event.target.result);
+
+        if (settings.comfyuiPath !== undefined) localStorage.setItem('somni-comfyui-path', settings.comfyuiPath);
+        if (settings.showSeedOverlay !== undefined) localStorage.setItem('somni-show-seed-overlay', settings.showSeedOverlay);
+        if (settings.clearGalleryShutdown !== undefined) localStorage.setItem('somni-clear-gallery-shutdown', settings.clearGalleryShutdown);
+        if (settings.theme !== undefined) localStorage.setItem('somni-theme', settings.theme);
+        if (settings.accentDark !== undefined) localStorage.setItem('somni-accent-dark', settings.accentDark);
+        if (settings.accentLight !== undefined) localStorage.setItem('somni-accent-light', settings.accentLight);
+        if (settings.nightlyMode !== undefined) localStorage.setItem('somni-nightly-mode', settings.nightlyMode);
+
+        loadSettings();
+        showToast('Settings imported successfully. Reload to apply changes.', 'success');
+      } catch(e) {
+        showToast('Failed to import settings. Invalid file format.', 'error');
+      }
+    };
+    reader.readAsText(file);
+  };
+  input.click();
 }
 
 function setAccentColor(mode, color) {

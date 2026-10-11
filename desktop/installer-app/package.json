@@ -1,6 +1,6 @@
 {
   "name": "somni-installer",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "somni desktop installer",
   "main": "main.js",
   "author": "somni",
